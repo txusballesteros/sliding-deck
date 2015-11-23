@@ -4,11 +4,13 @@ import android.support.v4.util.CircularArray;
 
 class SlidingLayoutQueue  {
     private final CircularArray<SlidingLayout> queue;
-    private final int maxNumberOfElements;
 
-    public SlidingLayoutQueue(int maxNumberOfElements) {
-        this.maxNumberOfElements = maxNumberOfElements;
+    public SlidingLayoutQueue() {
         queue = new CircularArray<>();
+    }
+
+    public int size() {
+        return queue.size();
     }
 
     public SlidingLayout getView(int position) {

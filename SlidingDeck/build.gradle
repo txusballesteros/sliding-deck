@@ -27,6 +27,12 @@ android {
     }
 }
 
+dependencies {
+    def libraryDependencies = globalConfiguration.libraryDependencies
+    compile libraryDependencies.AndroidAnnotations
+    compile libraryDependencies.AndroidSupportV4
+}
+
 publish {
     userOrg = globalConfiguration.getAt("jcenterUserOrganinzation")
     groupId = globalConfiguration.getAt("jcenterGroupId")
@@ -34,10 +40,4 @@ publish {
     publishVersion = globalConfiguration.getAt("androidVersionName")
     desc = globalConfiguration.getAt("jcenterDescription")
     website = globalConfiguration.getAt("jcenterWebsite")
-}
-
-dependencies {
-    def libraryDependencies = globalConfiguration.libraryDependencies
-    compile libraryDependencies.AndroidAnnotations
-    compile libraryDependencies.AndroidSupportV4
 }

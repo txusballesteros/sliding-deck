@@ -13,8 +13,8 @@ import android.widget.Adapter;
 import android.widget.FrameLayout;
 
 public class SlidingDeck extends FrameLayout {
-    private final static int MAXIMUM_ELEMENTS_ON_SCREEN = 5;
-    private SlidingLayoutQueue itemsQueue =  new SlidingLayoutQueue(MAXIMUM_ELEMENTS_ON_SCREEN);
+    private final static int MAXIMUM_ELEMENTS_ON_SCREEN = 4;
+    private SlidingLayoutQueue itemsQueue =  new SlidingLayoutQueue();
     private Adapter adapter;
 
     private DataSetObserver adapterObserver = new DataSetObserver() {
@@ -60,8 +60,7 @@ public class SlidingDeck extends FrameLayout {
     }
 
     private void invalidateItemsQueue() {
-        removeAllViews();
-        for (int position = 0; position < adapter.getCount(); position++) {
+        for (int position = 0; position < MAXIMUM_ELEMENTS_ON_SCREEN; position++) {
             if (position < MAXIMUM_ELEMENTS_ON_SCREEN) {
                 SlidingLayout slidingLayout = itemsQueue.getView(position);
                 if (slidingLayout != null) {
@@ -72,8 +71,11 @@ public class SlidingDeck extends FrameLayout {
                     slidingLayout = new SlidingLayout(getContext(), convertView, position);
                     itemsQueue.add(slidingLayout);
                 }
-                addView(slidingLayout);
             }
+        }
+        removeAllViews();
+        for (int position = 0; position < itemsQueue.size(); position++) {
+            addView(itemsQueue.getView(position), 0);
         }
     }
 }
