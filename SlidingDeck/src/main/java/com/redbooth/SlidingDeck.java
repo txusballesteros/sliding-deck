@@ -3,24 +3,29 @@ package com.redbooth;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.FrameLayout;
 
-public class SlidingDeck extends View {
+public class SlidingDeck extends FrameLayout {
+    private final static int MAXIMUM_ELEMENTS_ON_SCREEN = 5;
+    private SlidingLayoutQueue itemsQueue =  new SlidingLayoutQueue(MAXIMUM_ELEMENTS_ON_SCREEN);
     private Adapter adapter;
 
     private DataSetObserver adapterObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
-            invalidate();
+            invalidateItemsQueue();
         }
 
         @Override
         public void onInvalidated() {
-            invalidate();
+            invalidateItemsQueue();
         }
     };
 
@@ -33,7 +38,7 @@ public class SlidingDeck extends View {
         }
         this.adapter = adapter;
         this.adapter.registerDataSetObserver(adapterObserver);
-        invalidate();
+        invalidateItemsQueue();
     }
 
     public SlidingDeck(Context context) {
@@ -54,8 +59,21 @@ public class SlidingDeck extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    @Override
-    public void invalidate() {
-        super.invalidate();
+    private void invalidateItemsQueue() {
+        removeAllViews();
+        for (int position = 0; position < adapter.getCount(); position++) {
+            if (position < MAXIMUM_ELEMENTS_ON_SCREEN) {
+                SlidingLayout slidingLayout = itemsQueue.getView(position);
+                if (slidingLayout != null) {
+                    View convertView = slidingLayout.getPrimitiveView();
+                    adapter.getView(position, convertView, this);
+                } else {
+                    View convertView = adapter.getView(position, null, this);
+                    slidingLayout = new SlidingLayout(getContext(), convertView, position);
+                    itemsQueue.add(slidingLayout);
+                }
+                addView(slidingLayout);
+            }
+        }
     }
 }
