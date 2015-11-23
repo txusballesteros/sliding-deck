@@ -35,7 +35,7 @@ class SlidingLayout extends FrameLayout {
         float minimumMargin = dp2px(MINIMUM_OFFSET_LEFT_RIGHT_IN_DP);
         FrameLayout.LayoutParams params = new FrameLayout
                         .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                      ViewGroup.LayoutParams.MATCH_PARENT);
+                                      ViewGroup.LayoutParams.WRAP_CONTENT);
         int margin = (int)(minimumMargin * zIndex);
         params.setMargins(margin, WITHOUT_MARGIN, margin, WITHOUT_MARGIN);
         int contentPadding = dp2pxAsInt(DEFAULT_CONTENT_PADDING_IN_DP);
