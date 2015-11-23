@@ -31,5 +31,6 @@ dependencies {
     def mobileDependencies = globalConfiguration.mobileDependencies
     compile project(':SlidingDeck')
     compile mobileDependencies.AppCompat
-    compile 'com.android.support:design:23.1.1'
+    compile mobileDependencies.DesignLibrary
+    compile mobileDependencies.CardView
 }

@@ -21,7 +21,6 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
         }
         SlidingDeckModel item = getItem(position);
         ((TextView)view.findViewById(R.id.elementTitle)).setText(item.getTitle());
-        ((TextView)view.findViewById(R.id.elementDescription)).setText(item.getDescription());
         return view;
     }
 }

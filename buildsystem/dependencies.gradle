@@ -26,7 +26,9 @@ ext {
     androidAnnotationsVersion = "23.1.1"
 
     mobileDependencies = [
-        AppCompat: "com.android.support:appcompat-v7:${androidSupportVersion}"
+        AppCompat: "com.android.support:appcompat-v7:${androidSupportVersion}",
+        CardView: "com.android.support:cardview-v7:${androidSupportVersion}",
+        DesignLibrary: "com.android.support:design:${androidSupportVersion}"
     ]
 
     libraryDependencies = [
