@@ -35,3 +35,8 @@ publish {
     desc = globalConfiguration.getAt("jcenterDescription")
     website = globalConfiguration.getAt("jcenterWebsite")
 }
+
+dependencies {
+    def libraryDependencies = globalConfiguration.libraryDependencies
+    compile libraryDependencies.AndroidAnnotations
+}

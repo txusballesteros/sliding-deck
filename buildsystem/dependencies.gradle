@@ -23,8 +23,13 @@ ext {
 
     //Libraries Versions
     androidSupportVersion = "23.1.1"
+    androidAnnotationsVersion = "23.1.1"
 
     mobileDependencies = [
         AppCompat: "com.android.support:appcompat-v7:${androidSupportVersion}"
+    ]
+
+    libraryDependencies = [
+        AndroidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}"
     ]
 }
