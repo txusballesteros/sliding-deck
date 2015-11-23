@@ -14,8 +14,15 @@ ext {
     androidVersionCode = 1
     androidVersionName = "1.0.0"
 
+    //JCenter
+    jcenterUserOrganinzation = "Redbooth"
+    jcenterGroupId = "com.redbooth"
+    jcenterArtifactId = "SlidingDeck"
+    jcenterWebsite = "https://github.com/redbooth/SlidingDeck"
+    jcenterDescription = "SlidingDeck View for Android"
+
     //Libraries Versions
-    androidSupportVersion = '23.1.1'
+    androidSupportVersion = "23.1.1"
 
     mobileDependencies = [
         AppCompat: "com.android.support:appcompat-v7:${androidSupportVersion}"

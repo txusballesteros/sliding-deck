@@ -1,8 +1,9 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+def globalConfiguration = rootProject.extensions.getByName("ext")
 
 android {
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-
     compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
     buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
 
@@ -24,4 +25,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+publish {
+    userOrg = globalConfiguration.getAt("jcenterUserOrganinzation")
+    groupId = globalConfiguration.getAt("jcenterGroupId")
+    artifactId = globalConfiguration.getAt("jcenterArtifactId")
+    publishVersion = globalConfiguration.getAt("androidVersionName")
+    desc = globalConfiguration.getAt("jcenterDescription")
+    website = globalConfiguration.getAt("jcenterWebsite")
 }
