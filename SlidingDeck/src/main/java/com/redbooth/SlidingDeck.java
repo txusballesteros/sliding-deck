@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -15,12 +16,13 @@ public class SlidingDeck extends ViewGroup {
     private final static int MAXIMUM_ITEMS_ON_SCREEN = 4;
     private final static int MINIMUM_TOP_BOTTOM_OFFSET_DP = 10;
     private final static int MINIMUM_LEFT_RIGHT_OFFSET_DP = 15;
+    private View[] viewsBuffer;
     private ListAdapter adapter;
-    private int nextAdapterPosition = 0;
+    private SlidingDeckTouchController touchController;
 
     public void setAdapter(ListAdapter adapter) {
         this.adapter = adapter;
-        nextAdapterPosition = 0;
+        viewsBuffer = new View[MAXIMUM_ITEMS_ON_SCREEN];
         attachChildViews();
         requestLayout();
     }
@@ -47,7 +49,15 @@ public class SlidingDeck extends ViewGroup {
         initializeView();
     }
 
-    private void initializeView() { }
+    private void initializeView() {
+        viewsBuffer = new View[MAXIMUM_ITEMS_ON_SCREEN];
+        touchController = new SlidingDeckTouchController(this);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        return touchController.onInterceptTouchEvent(event);
+    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -135,26 +145,17 @@ public class SlidingDeck extends ViewGroup {
     }
 
     private void attachChildViews() {
-        for (int position = nextAdapterPosition; position < adapter.getCount(); position++) {
+        for (int position = FIRST_VIEW; position < adapter.getCount(); position++) {
             if (getChildCount() < MAXIMUM_ITEMS_ON_SCREEN) {
-                final View view = adapter.getView(nextAdapterPosition, null, this);
-                addView(view, FIRST_VIEW);
-                nextAdapterPosition++;
+                viewsBuffer[position] = adapter.getView(position, viewsBuffer[position], this);
+                addViewInLayout(viewsBuffer[position], FIRST_VIEW,
+                                    viewsBuffer[position].getLayoutParams());
             }
         }
     }
 
     @Nullable
-    private View getFirstView() {
-        if (getChildCount() > 0) {
-            return getChildAt(0);
-        } else {
-            return null;
-        }
-    }
-
-    @Nullable
-    private View getLastView() {
+    View getFirstView() {
         if (getChildCount() > 0) {
             return getChildAt(getChildCount() - 1);
         } else {
