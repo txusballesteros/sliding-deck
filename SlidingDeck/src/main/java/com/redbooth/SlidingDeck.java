@@ -62,8 +62,12 @@ public class SlidingDeck extends ViewGroup {
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        return touchController.onInterceptTouchEvent(event);
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean touchEventCaptured = touchController.onTouchEvent(event);
+        if (!touchEventCaptured) {
+            touchEventCaptured = super.onTouchEvent(event);
+        }
+        return touchEventCaptured;
     }
 
     @Override

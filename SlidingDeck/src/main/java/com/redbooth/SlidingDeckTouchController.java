@@ -24,12 +24,14 @@ class SlidingDeckTouchController {
         this.ownerView = ownerView;
     }
 
-    boolean onInterceptTouchEvent(MotionEvent event) {
+    boolean onTouchEvent(MotionEvent event) {
+        boolean result = false;
         int motionAction = event.getAction();
         switch (motionAction) {
             case MotionEvent.ACTION_DOWN:
                 initialPositionX = (int)event.getX();
                 initialPositionY = (int)event.getY();
+                result = true;
                 break;
             case MotionEvent.ACTION_MOVE:
                 int currentPositionX = (int)event.getX();
@@ -61,7 +63,7 @@ class SlidingDeckTouchController {
                 motionType = MotionType.UNKNOWN;
                 break;
         }
-        return false;
+        return result;
     }
 
     private void applyOffsets(int horizontalOffset, int verticalOffset) {

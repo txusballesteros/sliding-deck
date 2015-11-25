@@ -13,40 +13,14 @@
         app:cardElevation="5sp"
         app:cardBackgroundColor="@color/white">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
+        <TextView
+            android:id="@+id/elementTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            tools:text="Title"/>
 
-            <TextView
-                android:id="@+id/elementTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_gravity="center"
-                android:textSize="25sp"
-                tools:text="Title"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/activity_vertical_margin" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:background="@color/colorPrimary"/>
-
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:id="@+id/command"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="Command" />
-
-        </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>
