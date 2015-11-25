@@ -42,14 +42,14 @@ class SlidingDeckTouchController {
                     if (motionType == MotionType.UNKNOWN) {
                         motionType = getMotionType();
                     }
-                    applyOffsets(currentHorizontalOffset, currentVerticalOffset);
+                    applyOffsets(currentHorizontalOffset, accumulatedOffsetY);
                     initialPositionX = (int)event.getX();
                     initialPositionY = (int)event.getY();
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                applyOffsets(-accumulatedOffsetX, -accumulatedOffsetY);
+                applyOffsets(-accumulatedOffsetX, INITIAL_OFFSET);
                 initialPositionX = INITIAL_POSITION;
                 initialPositionY = INITIAL_POSITION;
                 accumulatedOffsetX = INITIAL_OFFSET;
@@ -60,11 +60,11 @@ class SlidingDeckTouchController {
         return false;
     }
 
-    private void applyOffsets(int currentHorizontalOffset, int currentVerticalOffset) {
+    private void applyOffsets(int horizontalOffset, int verticalOffset) {
         if (motionType == MotionType.HORIZONTAL) {
-            applyHorizontalMotion(currentHorizontalOffset);
+            applyHorizontalMotion(horizontalOffset);
         } else if (motionType == MotionType.VERTICAL) {
-            applyVerticalMotion(currentVerticalOffset);
+            applyVerticalMotion(verticalOffset);
         }
     }
 
@@ -90,9 +90,6 @@ class SlidingDeckTouchController {
     }
 
     private void applyVerticalMotion(int offset) {
-        final View view = ownerView.getFirstView();
-        if (view != null) {
-            view.offsetTopAndBottom(offset);
-        }
+        ownerView.setOffsetTopBottom(offset);
     }
 }
