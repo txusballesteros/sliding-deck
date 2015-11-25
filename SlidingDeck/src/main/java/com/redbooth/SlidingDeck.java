@@ -75,7 +75,7 @@ public class SlidingDeck extends ViewGroup {
             viewHeight = calculateWrapContentHeight();
         }
         setMeasuredDimension(viewWidth, viewHeight);
-        configureChildViewsMeasureSpecs(widthMeasureSpec, heightMeasureSpec);
+        configureChildViewsMeasureSpecs(widthMeasureSpec);
     }
 
     private int calculateWrapContentHeight() {
@@ -102,7 +102,7 @@ public class SlidingDeck extends ViewGroup {
         int childBottom;
         for (int index = FIRST_VIEW; index < getChildCount(); index++) {
             final View childView = getChildAt(index);
-            childLeft = calculateViewLeft(left, index);
+            childLeft = calculateViewLeft(left, right, childView.getMeasuredWidth(), index);
             childRight = childLeft + childView.getMeasuredWidth();
             childTop = calculateViewTop(bottom, childView.getMeasuredHeight(), index);
             childBottom = childTop + childView.getMeasuredHeight();
@@ -111,10 +111,9 @@ public class SlidingDeck extends ViewGroup {
         requestingLayout = false;
     }
 
-    private int calculateViewLeft(int parentLeft, int zIndex) {
-        int widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
-        return parentLeft + getPaddingLeft() + ((widthMinimumOffset / 2)
-                * ((MAXIMUM_ITEMS_ON_SCREEN -1) -  zIndex));
+    private int calculateViewLeft(int parentLeft, int parentRight, int childWith, int zIndex) {
+        int center = parentLeft + ((parentRight - parentLeft) / 2);
+        return center - (childWith / 2);
     }
 
     private int calculateViewTop(int parentBottom, int viewHeight, int zIndex) {
@@ -133,7 +132,7 @@ public class SlidingDeck extends ViewGroup {
         return result;
     }
 
-    private void configureChildViewsMeasureSpecs(int widthMeasureSpec, int heightMeasureSpec) {
+    private void configureChildViewsMeasureSpecs(int widthMeasureSpec) {
         int childWidthMeasureSpec;
         int childHeightMeasureSpec;
         final int parentWidth = MeasureSpec.getSize(widthMeasureSpec)
@@ -158,9 +157,20 @@ public class SlidingDeck extends ViewGroup {
         maximumOffsetTopBottom = (int)(minimumViewHeight * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
     }
 
-    private int calculateViewWidth(int parentWidth, int zIndex) {
-        int widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
-        return (parentWidth - (widthMinimumOffset * ((MAXIMUM_ITEMS_ON_SCREEN - 1) - zIndex)));
+    private int calculateViewWidth(float parentWidth, int zIndex) {
+        float widthMinimumOffsetFactor = getVerticalOffsetFactor();
+        float widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
+              widthMinimumOffset -= widthMinimumOffset * widthMinimumOffsetFactor;
+        float viewWidth = (parentWidth - (widthMinimumOffset * ((getChildCount() - 1) - zIndex)));
+        return (int)viewWidth;
+    }
+
+    private float getVerticalOffsetFactor() {
+        float result = 0f;
+        if (Math.abs(offsetTopBottom) > 0) {
+            result = (float)offsetTopBottom / (float)maximumOffsetTopBottom;
+        }
+        return result;
     }
 
     private void measureChildView(View view) {
