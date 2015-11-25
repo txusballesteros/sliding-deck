@@ -205,8 +205,12 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void setOffsetTopBottom(int offset) {
-        if (offset >= 0 && offset < maximumOffsetTopBottom) {
-            offsetTopBottom = offset;
+        if (offset >= 0) {
+            if (offset > maximumOffsetTopBottom) {
+                offsetTopBottom = maximumOffsetTopBottom;
+            } else {
+                offsetTopBottom = offset;
+            }
             requestLayout();
         }
     }
