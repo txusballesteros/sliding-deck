@@ -1,21 +1,23 @@
 package com.redbooth;
 
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ListAdapter;
 
 public class SlidingDeck extends ViewGroup {
+    private final static int ANIMATION_DURATION_IN_MS = 300;
     private final static int INITIAL_OFFSET_IN_PX = 0;
     private final static int FIRST_VIEW = 0;
-    private final static float MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR = 0.8f;
+    private final static float MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR = 0.75f;
     private final static int MAXIMUM_ITEMS_ON_SCREEN = 4;
     private final static int MINIMUM_TOP_BOTTOM_OFFSET_DP = 10;
     private final static int MINIMUM_LEFT_RIGHT_OFFSET_DP = 15;
@@ -24,7 +26,6 @@ public class SlidingDeck extends ViewGroup {
     private SlidingDeckTouchController touchController;
     private int offsetTopBottom = INITIAL_OFFSET_IN_PX;
     private int maximumOffsetTopBottom;
-    private boolean requestingLayout = false;
 
     public void setAdapter(ListAdapter adapter) {
         this.adapter = adapter;
@@ -88,9 +89,9 @@ public class SlidingDeck extends ViewGroup {
             }
         }
         int itemsElevationPadding = dp2px(MINIMUM_TOP_BOTTOM_OFFSET_DP)
-                                                * (MAXIMUM_ITEMS_ON_SCREEN - 1);
+                                                * (getChildCount() - 1);
         int measuredHeight = maxChildHeight + getPaddingTop() + getPaddingBottom() + itemsElevationPadding;
-        int measuredOffset = (offsetTopBottom * (MAXIMUM_ITEMS_ON_SCREEN -1));
+        int measuredOffset = (offsetTopBottom * (getChildCount() -1));
         return measuredHeight + measuredOffset;
     }
 
@@ -108,7 +109,6 @@ public class SlidingDeck extends ViewGroup {
             childBottom = childTop + childView.getMeasuredHeight();
             childView.layout(childLeft, childTop, childRight, childBottom);
         }
-        requestingLayout = false;
     }
 
     private int calculateViewLeft(int parentLeft, int parentRight, int childWith, int zIndex) {
@@ -119,7 +119,7 @@ public class SlidingDeck extends ViewGroup {
     private int calculateViewTop(int parentBottom, int viewHeight, int zIndex) {
         int topMinimumOffset = dp2px(MINIMUM_TOP_BOTTOM_OFFSET_DP);
         int viewTop = parentBottom - getPaddingBottom() - viewHeight - (topMinimumOffset
-                            * ((MAXIMUM_ITEMS_ON_SCREEN -1) - zIndex));
+                            * ((getChildCount() -1) - zIndex));
             viewTop -= getOffsetTopBottom(zIndex);
         return viewTop;
     }
@@ -188,13 +188,26 @@ public class SlidingDeck extends ViewGroup {
         }
     }
 
+    void collapseVerticalOffset() {
+        if (offsetTopBottom > 0) {
+            ValueAnimator animator = ValueAnimator.ofInt(offsetTopBottom, INITIAL_OFFSET_IN_PX);
+            animator.setInterpolator(new DecelerateInterpolator());
+            animator.setDuration(ANIMATION_DURATION_IN_MS);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    offsetTopBottom = (int) animation.getAnimatedValue();
+                    requestLayout();
+                }
+            });
+            animator.start();
+        }
+    }
+
     void setOffsetTopBottom(int offset) {
-        if (!requestingLayout) {
-            if (offset >= 0 && offset < maximumOffsetTopBottom) {
-                requestingLayout = true;
-                offsetTopBottom = offset;
-                requestLayout();
-            }
+        if (offset >= 0 && offset < maximumOffsetTopBottom) {
+            offsetTopBottom = offset;
+            requestLayout();
         }
     }
 

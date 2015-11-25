@@ -49,7 +49,11 @@ class SlidingDeckTouchController {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                applyOffsets(-accumulatedOffsetX, INITIAL_OFFSET);
+                if (motionType == MotionType.VERTICAL) {
+                    ownerView.collapseVerticalOffset();
+                } else {
+                    applyOffsets(-accumulatedOffsetX, -accumulatedOffsetY);
+                }
                 initialPositionX = INITIAL_POSITION;
                 initialPositionY = INITIAL_POSITION;
                 accumulatedOffsetX = INITIAL_OFFSET;
