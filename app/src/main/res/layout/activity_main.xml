@@ -9,6 +9,7 @@
         android:id="@+id/slidingDeck"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:padding="8dp"
         android:background="@color/colorAccent" />
 
 </LinearLayout>
