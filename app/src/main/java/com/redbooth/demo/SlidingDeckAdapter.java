@@ -9,13 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.redbooth.SlidingDeck;
+
 public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
     public SlidingDeckAdapter(Context context) {
         super(context, R.layout.sliding_item);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             view = LayoutInflater.from(parent.getContext())

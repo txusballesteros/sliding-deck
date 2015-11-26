@@ -13,7 +13,7 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin_small"
         android:layout_marginRight="@dimen/activity_horizontal_margin_small"
         app:cardBackgroundColor="@color/white"
-        app:cardElevation="5sp">
+        app:cardElevation="4sp">
 
         <TextView
             android:id="@+id/elementTitle"
