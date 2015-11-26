@@ -55,6 +55,10 @@ public class SlidingDeck extends ViewGroup {
         attachChildViews();
     }
 
+    public boolean isExpanded() {
+        return expandedVertically;
+    }
+
     public void setSwipeEventListener(SwipeEventListener swipeEventListener) {
         this.swipeEventListener = swipeEventListener;
     }
@@ -349,7 +353,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void setOffsetTopBottom(int offset) {
-        if (!performingSwipe) {
+        if (!performingSwipe && !expandedVertically) {
             if (offset >= 0) {
                 if (offset > maximumOffsetTopBottom) {
                     offsetTopBottom = maximumOffsetTopBottom;

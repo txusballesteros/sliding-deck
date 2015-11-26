@@ -51,7 +51,10 @@ class SlidingDeckTouchController {
                 if (Math.abs(xVelocity) >= SNAP_VELOCITY) {
                     ownerView.performHorizontalSwipe();
                 } else if (Math.abs(yVelocity) >= SNAP_VELOCITY) {
-                    ownerView.performVerticalSwipe();
+                    if ((yVelocity > 0 && !ownerView.isExpanded()) ||
+                        (yVelocity < 0 && ownerView.isExpanded())) {
+                        ownerView.performVerticalSwipe();
+                    }
                 }
                 int currentPositionX = (int)event.getX();
                 int currentPositionY = (int)event.getY();
