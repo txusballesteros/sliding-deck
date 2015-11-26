@@ -1,9 +1,12 @@
 package com.redbooth;
 
+import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
+import android.view.VelocityTracker;
 
 class SlidingDeckTouchController {
+    private static final int SNAP_VELOCITY = 5000;
+    private static final int VELOCITY_UNITS = 1000;
     private static final int INITIAL_POSITION = 0;
     private static final int INITIAL_OFFSET = 0;
     private static final int MINIMUM_OFFSET_TO_TRIGGER_MOVEMENT_IN_PX = 20;
@@ -13,6 +16,7 @@ class SlidingDeckTouchController {
     private int initialPositionY = INITIAL_POSITION;
     private final SlidingDeck ownerView;
     private MotionType motionType = MotionType.UNKNOWN;
+    private VelocityTracker velocityTracker;
 
     enum MotionType {
         UNKNOWN,
@@ -29,11 +33,23 @@ class SlidingDeckTouchController {
         int motionAction = event.getAction();
         switch (motionAction) {
             case MotionEvent.ACTION_DOWN:
+                if (velocityTracker == null) {
+                    velocityTracker = VelocityTracker.obtain();
+                } else {
+                    velocityTracker.clear();
+                }
+                velocityTracker.addMovement(event);
                 initialPositionX = (int)event.getX();
                 initialPositionY = (int)event.getY();
                 result = true;
                 break;
             case MotionEvent.ACTION_MOVE:
+                velocityTracker.addMovement(event);
+                velocityTracker.computeCurrentVelocity(VELOCITY_UNITS);
+                float xVelocity = velocityTracker.getXVelocity();
+                if (xVelocity >= SNAP_VELOCITY) {
+                    ownerView.performHorizontalSwipe();
+                }
                 int currentPositionX = (int)event.getX();
                 int currentPositionY = (int)event.getY();
                 int currentHorizontalOffset = currentPositionX - initialPositionX;
@@ -51,18 +67,21 @@ class SlidingDeckTouchController {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (motionType == MotionType.VERTICAL) {
-                    ownerView.collapseVerticalOffset();
-                } else if (motionType == MotionType.HORIZONTAL) {
-                    ownerView.collapseHorizontalOffset();
-                } else {
-                    applyOffsets(-accumulatedOffsetX, -accumulatedOffsetY);
-                }
+                velocityTracker.recycle();
+                velocityTracker = null;
+//                if (motionType == MotionType.VERTICAL) {
+//                    ownerView.collapseVerticalOffset();
+//                } else if (motionType == MotionType.HORIZONTAL) {
+//                    ownerView.collapseHorizontalOffset();
+//                } else {
+//                    applyOffsets(-accumulatedOffsetX, -accumulatedOffsetY);
+//                }
                 initialPositionX = INITIAL_POSITION;
                 initialPositionY = INITIAL_POSITION;
                 accumulatedOffsetX = INITIAL_OFFSET;
                 accumulatedOffsetY = INITIAL_OFFSET;
                 motionType = MotionType.UNKNOWN;
+                ownerView.performReleaseTouch();
                 break;
         }
         return result;

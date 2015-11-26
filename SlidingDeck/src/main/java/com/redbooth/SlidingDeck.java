@@ -1,5 +1,6 @@
 package com.redbooth;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ListAdapter;
 
@@ -29,6 +31,7 @@ public class SlidingDeck extends ViewGroup {
     private int offsetLeftRight = INITIAL_OFFSET_IN_PX;
     private int maximumOffsetTopBottom;
     private int maximumOffsetLeftRight;
+    private boolean performingSwipe = false;
 
     public void setAdapter(ListAdapter adapter) {
         this.adapter = adapter;
@@ -295,21 +298,72 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void setOffsetLeftRight(int offset) {
-        if (offset >= 0) {
-            offsetLeftRight = offset;
-            requestLayout();
+        if (!performingSwipe) {
+            if (offset >= 0) {
+                offsetLeftRight = offset;
+                requestLayout();
+            }
         }
     }
 
     void setOffsetTopBottom(int offset) {
-        if (offset >= 0) {
-            Log.d("SlidingDeck", String.format("Offset: %d", offset));
-            if (offset > maximumOffsetTopBottom) {
-                offsetTopBottom = maximumOffsetTopBottom;
-            } else {
-                offsetTopBottom = offset;
+        if (!performingSwipe) {
+            if (offset >= 0) {
+                if (offset > maximumOffsetTopBottom) {
+                    offsetTopBottom = maximumOffsetTopBottom;
+                } else {
+                    offsetTopBottom = offset;
+                }
+                requestLayout();
             }
-            requestLayout();
+        }
+    }
+
+    void performHorizontalSwipe() {
+        if (!performingSwipe) {
+            performingSwipe = true;
+            ValueAnimator animator = ValueAnimator.ofInt(offsetLeftRight, getMeasuredWidth());
+            animator.setInterpolator(new AccelerateInterpolator());
+            animator.setDuration(ANIMATION_DURATION_IN_MS);
+            animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) { }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    offsetLeftRight = 0;
+                    performingSwipe = false;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) { }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) { }
+            });
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    offsetLeftRight = (int)animation.getAnimatedValue();
+                    requestLayout();
+                }
+            });
+            animator.start();
+        }
+    }
+
+    void performReleaseTouch() {
+        if (!performingSwipe) {
+            if (offsetLeftRight > 0) {
+                if (offsetLeftRight < maximumOffsetLeftRight) {
+                    collapseHorizontalOffset();
+                } else {
+                    performHorizontalSwipe();
+                }
+            }
+            if (offsetTopBottom > 0) {
+                collapseVerticalOffset();
+            }
         }
     }
 
