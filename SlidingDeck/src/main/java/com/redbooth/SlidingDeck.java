@@ -39,7 +39,6 @@ public class SlidingDeck extends ViewGroup {
         @Override
         public void onChanged() {
             attachChildViews();
-            requestLayout();
         }
     };
 
@@ -51,7 +50,6 @@ public class SlidingDeck extends ViewGroup {
         this.adapter.registerDataSetObserver(dataSetObserver);
         viewsBuffer = new View[MAXIMUM_ITEMS_ON_SCREEN];
         attachChildViews();
-        requestLayout();
     }
 
     public void setSwipeEventListener(SwipeEventListener swipeEventListener) {
@@ -282,6 +280,7 @@ public class SlidingDeck extends ViewGroup {
                                     viewsBuffer[position].getLayoutParams());
             }
         }
+        requestLayout();
     }
 
     void collapseVerticalOffset() {
