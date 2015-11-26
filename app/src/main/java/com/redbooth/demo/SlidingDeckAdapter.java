@@ -34,6 +34,15 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
                 .placeholder(R.mipmap.ic_launcher)
                 .transform(new RoundedTransform())
                 .into(avatar);
+        final View completeView = view.findViewById(R.id.completeCommand);
+        completeView.setTag(item);
+        completeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remove((SlidingDeckModel)view.getTag());
+                notifyDataSetChanged();
+            }
+        });
         return view;
     }
 }
