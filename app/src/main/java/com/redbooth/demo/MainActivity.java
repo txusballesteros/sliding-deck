@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
         slidingDeck.setSwipeEventListener(new SlidingDeck.SwipeEventListener() {
             @Override
             public void onSwipe(SlidingDeck view) {
+                SlidingDeckModel model = slidingAdapter.getItem(0);
                 slidingAdapter.remove(slidingAdapter.getItem(0));
+                slidingAdapter.insert(model, slidingAdapter.getCount());
                 slidingAdapter.notifyDataSetChanged();
             }
         });

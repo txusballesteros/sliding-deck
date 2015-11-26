@@ -17,7 +17,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ListAdapter;
 
 public class SlidingDeck extends ViewGroup {
-    private final static int ANIMATION_DURATION_IN_MS = 300;
+    private final static int ANIMATION_DURATION_IN_MS = 200;
     private final static int INITIAL_OFFSET_IN_PX = 0;
     private final static int FIRST_VIEW = 0;
     private final static float INITIAL_ALPHA_FOR_LATEST_ITEM = 0.25f;
