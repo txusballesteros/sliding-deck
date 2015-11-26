@@ -260,13 +260,13 @@ public class SlidingDeck extends ViewGroup {
 
     private int calculateViewWidth(float parentWidth, int zIndex) {
         float widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
-        float maximunWidthOffset = (widthMinimumOffset * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
+        float maximumWidthOffset = (widthMinimumOffset * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
         float widthMinimumOffsetFactor = getVerticalOffsetFactor();
         float widthOffset = widthMinimumOffset * widthMinimumOffsetFactor;
-        if (widthOffset < maximunWidthOffset) {
+        if (widthOffset < maximumWidthOffset) {
             widthMinimumOffset -= widthOffset;
         } else {
-            widthMinimumOffset -= maximunWidthOffset;
+            widthMinimumOffset -= maximumWidthOffset;
         }
         float viewWidth = (parentWidth - (widthMinimumOffset * (getViewsCount() - zIndex)));
         if (isNotTheFromView(zIndex)) {
