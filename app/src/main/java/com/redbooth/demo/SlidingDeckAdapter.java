@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.redbooth.SlidingDeck;
 import com.squareup.picasso.Picasso;
 
 public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
@@ -37,8 +38,20 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
         completeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                remove((SlidingDeckModel)view.getTag());
-                notifyDataSetChanged();
+                final SlidingDeck slidingDeck = (SlidingDeck) parent;
+                final SlidingDeckModel model = (SlidingDeckModel) view.getTag();
+                if (!slidingDeck.isExpanded()) {
+                    slidingDeck.swipeForegroundItem(new SlidingDeck.SwipeEventListener() {
+                        @Override
+                        public void onSwipe(SlidingDeck view) {
+                            remove(model);
+                            notifyDataSetChanged();
+                        }
+                    });
+                } else {
+                    remove(model);
+                    notifyDataSetChanged();
+                }
             }
         });
         return view;

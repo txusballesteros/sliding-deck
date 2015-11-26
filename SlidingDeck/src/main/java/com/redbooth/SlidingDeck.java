@@ -64,7 +64,11 @@ public class SlidingDeck extends ViewGroup {
     }
 
     public void swipeForegroundItem() {
-        performHorizontalSwipe();
+        swipeForegroundItem(swipeEventListener);
+    }
+
+    public void swipeForegroundItem(SwipeEventListener listener) {
+        performHorizontalSwipe(listener);
     }
 
     public SlidingDeck(Context context) {
@@ -366,6 +370,10 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void performHorizontalSwipe() {
+        performHorizontalSwipe(swipeEventListener);
+    }
+
+    void performHorizontalSwipe(final SwipeEventListener listener) {
         if (!performingSwipe && !expandedVertically && getChildCount() > 0) {
             performingSwipe = true;
             ValueAnimator animator = ValueAnimator.ofInt(offsetLeftRight, getMeasuredWidth());
@@ -379,7 +387,9 @@ public class SlidingDeck extends ViewGroup {
                 public void onAnimationEnd(Animator animation) {
                     offsetLeftRight = 0;
                     performingSwipe = false;
-                    removeItemFromAdapter();
+                    if (listener != null) {
+                        swipeEventListener.onSwipe(SlidingDeck.this);
+                    }
                 }
 
                 @Override
@@ -453,18 +463,12 @@ public class SlidingDeck extends ViewGroup {
                 if (offsetLeftRight < maximumOffsetLeftRight) {
                     collapseHorizontalOffset();
                 } else {
-                    performHorizontalSwipe();
+                    performHorizontalSwipe(swipeEventListener);
                 }
             }
             if (offsetTopBottom > 0) {
                 collapseVerticalOffset();
             }
-        }
-    }
-
-    private void removeItemFromAdapter() {
-        if (swipeEventListener != null) {
-            swipeEventListener.onSwipe(this);
         }
     }
 
