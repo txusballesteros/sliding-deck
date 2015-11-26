@@ -18,7 +18,7 @@ public class SlidingDeck extends ViewGroup {
     private final static int FIRST_VIEW = 0;
     private final static float MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR = 0.75f;
     private final static float MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR = 0.4f;
-    private final static int MAXIMUM_ITEMS_ON_SCREEN = 4;
+    private final static int MAXIMUM_ITEMS_ON_SCREEN = 5;
     private final static int MINIMUM_TOP_BOTTOM_OFFSET_DP = 8;
     private final static int MINIMUM_LEFT_RIGHT_OFFSET_DP = 16;
     private View[] viewsBuffer;
@@ -115,12 +115,16 @@ public class SlidingDeck extends ViewGroup {
             childBottom = childTop + childView.getMeasuredHeight();
             childView.layout(childLeft, childTop, childRight, childBottom);
         }
+        if (getChildCount() > 1) {
+            float lastViewAlpha = calculateCurrentLeftRightOffsetFactor();
+            getChildAt(0).setAlpha(lastViewAlpha);
+        }
     }
 
     private int calculateViewLeft(int parentLeft, int parentRight, int childWith, int zIndex) {
         int center = parentLeft + ((parentRight - parentLeft) / 2);
         int result = center - (childWith / 2);
-        if (zIndex == (getChildCount() - 1)) {
+        if (isTheFromView(zIndex)) {
             result += offsetLeftRight;
         }
         return result;
@@ -139,13 +143,17 @@ public class SlidingDeck extends ViewGroup {
         return viewTop;
     }
 
+    private boolean isTheFromView(int zIndex) {
+        return !isNotTheFromView(zIndex);
+    }
+
     private boolean isNotTheFromView(int zIndex) {
         return zIndex < (getChildCount()  - 1);
     }
 
     private int getOffsetTopBottom(int zIndex) {
         int result = 0;
-        if (zIndex < (getChildCount() - 1)) {
+        if (isNotTheFromView(zIndex)) {
             result = offsetTopBottom * (getChildCount() - (zIndex + 1));
         }
         return result;
