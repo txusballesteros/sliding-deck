@@ -338,7 +338,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void performHorizontalSwipe() {
-        if (!performingSwipe && getViewsCount() > 0) {
+        if (!performingSwipe && getChildCount() > 0) {
             performingSwipe = true;
             ValueAnimator animator = ValueAnimator.ofInt(offsetLeftRight, getMeasuredWidth());
             animator.setInterpolator(new AccelerateInterpolator());
