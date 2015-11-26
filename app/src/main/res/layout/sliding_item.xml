@@ -12,7 +12,8 @@
         app:cardUseCompatPadding="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin_small"
         android:layout_marginRight="@dimen/activity_horizontal_margin_small"
-        app:cardBackgroundColor="@color/white">
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="5sp">
 
         <TextView
             android:id="@+id/elementTitle"

@@ -100,6 +100,37 @@ public class SlidingDeck extends ViewGroup {
         return measuredHeight + measuredOffset;
     }
 
+    private void configureChildViewsMeasureSpecs(int widthMeasureSpec) {
+        int childWidthMeasureSpec;
+        int childHeightMeasureSpec;
+        final int parentWidth = MeasureSpec.getSize(widthMeasureSpec)
+                - getPaddingLeft()
+                - getPaddingRight();
+        int viewWidth;
+        int viewHeight;
+        int minimumViewHeight = 0;
+        int maximumViewWidth = 0;
+        for (int index = FIRST_VIEW; index < getChildCount(); index++) {
+            final View childView = getChildAt(index);
+            measureChildView(childView);
+            viewWidth = calculateViewWidth(parentWidth, index);
+            viewHeight = childView.getMeasuredHeight();
+            childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(viewWidth, MeasureSpec.EXACTLY);
+            childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(viewHeight, MeasureSpec.EXACTLY);
+            childView.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+            if (minimumViewHeight == 0) {
+                minimumViewHeight = viewHeight;
+            }
+            if (maximumViewWidth == 0) {
+                maximumViewWidth = viewWidth;
+            }
+            minimumViewHeight = Math.min(minimumViewHeight, viewHeight);
+            maximumViewWidth = Math.max(maximumViewWidth, viewWidth);
+        }
+        maximumOffsetTopBottom = (int)(minimumViewHeight * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
+        maximumOffsetLeftRight = (int)(maximumViewWidth * MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR);
+    }
+
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int childLeft;
@@ -163,7 +194,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     private boolean isNotTheFromView(int zIndex) {
-        return zIndex < (getChildCount()  - 1);
+        return zIndex < getViewsCount();
     }
 
     private int getOffsetTopBottom(int zIndex) {
@@ -199,45 +230,11 @@ public class SlidingDeck extends ViewGroup {
         return offsetFactor;
     }
 
-    private void configureChildViewsMeasureSpecs(int widthMeasureSpec) {
-        int childWidthMeasureSpec;
-        int childHeightMeasureSpec;
-        final int parentWidth = MeasureSpec.getSize(widthMeasureSpec)
-                                    - getPaddingLeft()
-                                    - getPaddingRight();
-        int viewWidth;
-        int viewHeight;
-        int minimumViewHeight = 0;
-        int maximumViewWidth = 0;
-        for (int index = FIRST_VIEW; index < getChildCount(); index++) {
-            final View childView = getChildAt(index);
-            measureChildView(childView);
-            viewWidth = calculateViewWidth(parentWidth, index);
-            viewHeight = childView.getMeasuredHeight();
-            childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(viewWidth, MeasureSpec.EXACTLY);
-            childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(viewHeight, MeasureSpec.EXACTLY);
-            childView.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-            if (minimumViewHeight == 0) {
-                minimumViewHeight = viewHeight;
-            }
-            if (maximumViewWidth == 0) {
-                maximumViewWidth = viewWidth;
-            }
-            minimumViewHeight = Math.min(minimumViewHeight, viewHeight);
-            maximumViewWidth = Math.max(maximumViewWidth, viewWidth);
-        }
-        maximumOffsetTopBottom = (int)(minimumViewHeight * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
-        maximumOffsetLeftRight = (int)(maximumViewWidth * MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR);
-    }
-
     private int calculateViewWidth(float parentWidth, int zIndex) {
         float widthMinimumOffsetFactor = getVerticalOffsetFactor();
         float widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
               widthMinimumOffset -= widthMinimumOffset * widthMinimumOffsetFactor;
-        float viewWidth = (parentWidth - (widthMinimumOffset * ((getChildCount() - 1) - zIndex)));
-        if (isNotTheFromView(zIndex)) {
-            viewWidth += getOffsetLeftRight(MINIMUM_LEFT_RIGHT_OFFSET_DP);
-        }
+        float viewWidth = (parentWidth - (widthMinimumOffset * (getViewsCount() - zIndex)));
         return (int)viewWidth;
     }
 
