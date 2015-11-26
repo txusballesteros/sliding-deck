@@ -4,7 +4,6 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -131,8 +130,17 @@ public class SlidingDeck extends ViewGroup {
         int topMinimumOffset = dp2px(MINIMUM_TOP_BOTTOM_OFFSET_DP);
         int viewTop = parentBottom - getPaddingBottom() - viewHeight - (topMinimumOffset
                             * ((getChildCount() -1) - zIndex));
+        if (offsetTopBottom > 0) {
             viewTop -= getOffsetTopBottom(zIndex);
+        }
+        if (offsetLeftRight > 0 && isNotTheFromView(zIndex)) {
+            viewTop += getOffsetLeftRight();
+        }
         return viewTop;
+    }
+
+    private boolean isNotTheFromView(int zIndex) {
+        return zIndex < (getChildCount()  - 1);
     }
 
     private int getOffsetTopBottom(int zIndex) {
@@ -143,6 +151,21 @@ public class SlidingDeck extends ViewGroup {
         return result;
     }
 
+    private int getOffsetLeftRight() {
+        float topMinimumOffset = dp2px(MINIMUM_TOP_BOTTOM_OFFSET_DP);
+        float offsetFactor = calculateCurrentLeftRightOffsetFactor();
+        float result = (topMinimumOffset * offsetFactor);
+        return (int)result;
+    }
+
+    private float calculateCurrentLeftRightOffsetFactor() {
+        float offsetLimit = (maximumOffsetLeftRight * MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR);
+        float offsetFactor = ((float)offsetLeftRight / offsetLimit);
+        if (offsetFactor > 1) {
+            offsetFactor = 1f;
+        }
+        return offsetFactor;
+    }
     private void configureChildViewsMeasureSpecs(int widthMeasureSpec) {
         int childWidthMeasureSpec;
         int childHeightMeasureSpec;
