@@ -73,8 +73,10 @@ class SlidingDeckTouchController {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                velocityTracker.recycle();
-                velocityTracker = null;
+                if (velocityTracker != null) {
+                    velocityTracker.recycle();
+                    velocityTracker = null;
+                }
                 initialPositionX = INITIAL_POSITION;
                 initialPositionY = INITIAL_POSITION;
                 accumulatedOffsetX = INITIAL_OFFSET;
