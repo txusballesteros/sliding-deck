@@ -394,7 +394,7 @@ public class SlidingDeck extends ViewGroup {
                     offsetLeftRight = 0;
                     performingSwipe = false;
                     if (listener != null) {
-                        swipeEventListener.onSwipe(SlidingDeck.this);
+                        listener.onSwipe(SlidingDeck.this);
                     }
                 }
 
