@@ -19,6 +19,7 @@ public class SlidingDeck extends ViewGroup {
     private final static int ANIMATION_DURATION_IN_MS = 200;
     private final static int INITIAL_OFFSET_IN_PX = 0;
     private final static int FIRST_VIEW = 0;
+    private final static float INITIAL_ALPHA_FOR_LAST_ITEM = 0.25f;
     private final static float MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR = 0.75f;
     private final static float MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR = 0.4f;
     private final static int MAXIMUM_ITEMS_ON_SCREEN = 5;
@@ -29,6 +30,7 @@ public class SlidingDeck extends ViewGroup {
     private SlidingDeckTouchController touchController;
     private int offsetTopBottom = INITIAL_OFFSET_IN_PX;
     private int offsetLeftRight = INITIAL_OFFSET_IN_PX;
+    private int initialViewHeight = -1;
     private int maximumOffsetTopBottom;
     private int maximumOffsetLeftRight;
     private boolean performingSwipe = false;
@@ -94,11 +96,15 @@ public class SlidingDeck extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int viewHeight = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMeasureMode = MeasureSpec.getMode(heightMeasureSpec);
-        if (heightMeasureMode == MeasureSpec.AT_MOST) {
-            viewWidth = MeasureSpec.getSize(widthMeasureSpec);
-            viewHeight = calculateWrapContentHeight();
+        int viewHeight = calculateWrapContentHeight();
+        if (getChildCount() > 0) {
+            if (initialViewHeight == -1) {
+                initialViewHeight = viewHeight;
+            } else if (viewHeight < initialViewHeight) {
+                viewHeight = initialViewHeight;
+            }
+        } else {
+            initialViewHeight = -1;
         }
         setMeasuredDimension(viewWidth, viewHeight);
         configureChildViewsMeasureSpecs(widthMeasureSpec);
@@ -167,11 +173,14 @@ public class SlidingDeck extends ViewGroup {
             }
         }
         if (getChildCount() > 1) {
-            float viewAlpha = 0f;
+            float viewAlpha = INITIAL_ALPHA_FOR_LAST_ITEM;
             if (offsetLeftRight > 0) {
                 viewAlpha = calculateCurrentLeftRightOffsetFactor();
             } else if (offsetTopBottom > 0) {
                 viewAlpha = calculateCurrentTopBottomOffsetFactor();
+            }
+            if (viewAlpha < INITIAL_ALPHA_FOR_LAST_ITEM) {
+                viewAlpha = INITIAL_ALPHA_FOR_LAST_ITEM;
             }
             getChildAt(FIRST_VIEW).setAlpha(viewAlpha);
         }

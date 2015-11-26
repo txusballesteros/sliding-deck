@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeSlidingDeck() {
         slidingAdapter = new SlidingDeckAdapter(this);
-        for (int i = 1; i <= 10 ; i++) {
+        for (int i = 1; i <= 3 ; i++) {
             String title = String.format("Title %d", i);
             String description = String.format("Description %d", i);
             slidingAdapter.add(new SlidingDeckModel(title, description));
