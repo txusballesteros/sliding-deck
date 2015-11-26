@@ -14,18 +14,21 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ListAdapter;
 
 public class SlidingDeck extends ViewGroup {
-    private final static int ANIMATION_DURATION_IN_MS = 300;
+    private final static int ANIMATION_DURATION_IN_MS = 200;
     private final static int INITIAL_OFFSET_IN_PX = 0;
     private final static int FIRST_VIEW = 0;
     private final static float MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR = 0.75f;
+    private final static float MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR = 0.4f;
     private final static int MAXIMUM_ITEMS_ON_SCREEN = 4;
-    private final static int MINIMUM_TOP_BOTTOM_OFFSET_DP = 10;
-    private final static int MINIMUM_LEFT_RIGHT_OFFSET_DP = 15;
+    private final static int MINIMUM_TOP_BOTTOM_OFFSET_DP = 8;
+    private final static int MINIMUM_LEFT_RIGHT_OFFSET_DP = 16;
     private View[] viewsBuffer;
     private ListAdapter adapter;
     private SlidingDeckTouchController touchController;
     private int offsetTopBottom = INITIAL_OFFSET_IN_PX;
+    private int offsetLeftRight = INITIAL_OFFSET_IN_PX;
     private int maximumOffsetTopBottom;
+    private int maximumOffsetLeftRight;
 
     public void setAdapter(ListAdapter adapter) {
         this.adapter = adapter;
@@ -117,7 +120,11 @@ public class SlidingDeck extends ViewGroup {
 
     private int calculateViewLeft(int parentLeft, int parentRight, int childWith, int zIndex) {
         int center = parentLeft + ((parentRight - parentLeft) / 2);
-        return center - (childWith / 2);
+        int result = center - (childWith / 2);
+        if (zIndex == (getChildCount() - 1)) {
+            result += offsetLeftRight;
+        }
+        return result;
     }
 
     private int calculateViewTop(int parentBottom, int viewHeight, int zIndex) {
@@ -145,6 +152,7 @@ public class SlidingDeck extends ViewGroup {
         int viewWidth;
         int viewHeight;
         int minimumViewHeight = 0;
+        int maximumViewWidth = 0;
         for (int index = FIRST_VIEW; index < getChildCount(); index++) {
             final View childView = getChildAt(index);
             measureChildView(childView);
@@ -156,9 +164,14 @@ public class SlidingDeck extends ViewGroup {
             if (minimumViewHeight == 0) {
                 minimumViewHeight = viewHeight;
             }
+            if (maximumViewWidth == 0) {
+                maximumViewWidth = viewWidth;
+            }
             minimumViewHeight = Math.min(minimumViewHeight, viewHeight);
+            maximumViewWidth = Math.max(maximumViewWidth, viewWidth);
         }
         maximumOffsetTopBottom = (int)(minimumViewHeight * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
+        maximumOffsetLeftRight = (int)(maximumViewWidth * MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR);
     }
 
     private int calculateViewWidth(float parentWidth, int zIndex) {
@@ -208,6 +221,29 @@ public class SlidingDeck extends ViewGroup {
         }
     }
 
+    void collapseHorizontalOffset() {
+        if (offsetLeftRight > 0) {
+            ValueAnimator animator = ValueAnimator.ofInt(offsetLeftRight, INITIAL_OFFSET_IN_PX);
+            animator.setInterpolator(new DecelerateInterpolator());
+            animator.setDuration(ANIMATION_DURATION_IN_MS);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    offsetLeftRight = (int) animation.getAnimatedValue();
+                    requestLayout();
+                }
+            });
+            animator.start();
+        }
+    }
+
+    void setOffsetLeftRight(int offset) {
+        if (offset >= 0) {
+            offsetLeftRight = offset;
+            requestLayout();
+        }
+    }
+
     void setOffsetTopBottom(int offset) {
         if (offset >= 0) {
             if (offset > maximumOffsetTopBottom) {
@@ -216,15 +252,6 @@ public class SlidingDeck extends ViewGroup {
                 offsetTopBottom = offset;
             }
             requestLayout();
-        }
-    }
-
-    @Nullable
-    View getFirstView() {
-        if (getChildCount() > 0) {
-            return getChildAt(getChildCount() - 1);
-        } else {
-            return null;
         }
     }
 
