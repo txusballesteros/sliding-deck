@@ -3,19 +3,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorAccent">
 
     <com.redbooth.SlidingDeck
         android:id="@+id/slidingDeck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:background="@color/colorAccent" />
+        android:paddingBottom="@dimen/activity_vertical_margin" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:layout_height="100dp" />
+        android:layout_margin="@dimen/activity_horizontal_margin_small"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="sans-serif"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:text="@string/fill_text"/>
+
+    </android.support.v7.widget.CardView>
+
 
 </LinearLayout>

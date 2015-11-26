@@ -10,14 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         app:cardUseCompatPadding="true"
-        app:cardElevation="5sp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin_small"
+        android:layout_marginRight="@dimen/activity_horizontal_margin_small"
         app:cardBackgroundColor="@color/white">
 
         <TextView
             android:id="@+id/elementTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="sans-serif-light"
             android:layout_gravity="center"
             android:textSize="25sp"
             tools:text="Title"/>
