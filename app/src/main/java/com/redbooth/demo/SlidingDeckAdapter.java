@@ -1,15 +1,14 @@
 package com.redbooth.demo;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.redbooth.SlidingDeck;
+import com.squareup.picasso.Picasso;
 
 public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
     public SlidingDeckAdapter(Context context) {
@@ -25,6 +24,23 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
         }
         SlidingDeckModel item = getItem(position);
         ((TextView)view.findViewById(R.id.elementTitle)).setText(item.getTitle());
+        ((TextView)view.findViewById(R.id.description)).setText(item.getDescription());
+        ((TextView)view.findViewById(R.id.name)).setText(item.getName());
+        ImageView avatar = (ImageView)view.findViewById(R.id.avatar);
+        Picasso.with(parent.getContext())
+                .load(item.getAvatarUri())
+                .placeholder(R.mipmap.ic_launcher)
+                .transform(new RoundedTransform())
+                .into(avatar);
+        final View completeView = view.findViewById(R.id.completeCommand);
+        completeView.setTag(item);
+        completeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remove((SlidingDeckModel)view.getTag());
+                notifyDataSetChanged();
+            }
+        });
         return view;
     }
 }

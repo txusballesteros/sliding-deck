@@ -47,8 +47,11 @@ class SlidingDeckTouchController {
                 velocityTracker.addMovement(event);
                 velocityTracker.computeCurrentVelocity(VELOCITY_UNITS);
                 float xVelocity = velocityTracker.getXVelocity();
-                if (xVelocity >= SNAP_VELOCITY) {
+                float yVelocity = velocityTracker.getYVelocity();
+                if (Math.abs(xVelocity) >= SNAP_VELOCITY) {
                     ownerView.performHorizontalSwipe();
+                } else if (Math.abs(yVelocity) >= SNAP_VELOCITY) {
+                    ownerView.performVerticalSwipe();
                 }
                 int currentPositionX = (int)event.getX();
                 int currentPositionY = (int)event.getY();
@@ -69,13 +72,6 @@ class SlidingDeckTouchController {
             case MotionEvent.ACTION_UP:
                 velocityTracker.recycle();
                 velocityTracker = null;
-//                if (motionType == MotionType.VERTICAL) {
-//                    ownerView.collapseVerticalOffset();
-//                } else if (motionType == MotionType.HORIZONTAL) {
-//                    ownerView.collapseHorizontalOffset();
-//                } else {
-//                    applyOffsets(-accumulatedOffsetX, -accumulatedOffsetY);
-//                }
                 initialPositionX = INITIAL_POSITION;
                 initialPositionY = INITIAL_POSITION;
                 accumulatedOffsetX = INITIAL_OFFSET;
