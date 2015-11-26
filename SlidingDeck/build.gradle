@@ -34,10 +34,16 @@ dependencies {
 }
 
 publish {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
     userOrg = globalConfiguration.getAt("jcenterUserOrganinzation")
     groupId = globalConfiguration.getAt("jcenterGroupId")
     artifactId = globalConfiguration.getAt("jcenterArtifactId")
     publishVersion = globalConfiguration.getAt("androidVersionName")
     desc = globalConfiguration.getAt("jcenterDescription")
     website = globalConfiguration.getAt("jcenterWebsite")
+    repository = globalConfiguration.getAt("jcenterRepository")
+    bintrayUser = properties.getProperty("bintrayUser")
+    bintrayKey = properties.getProperty("bintrayKey")
 }

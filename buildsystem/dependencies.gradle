@@ -20,6 +20,7 @@ ext {
     jcenterArtifactId = "SlidingDeck"
     jcenterWebsite = "https://github.com/redbooth/SlidingDeck"
     jcenterDescription = "SlidingDeck View for Android"
+    jcenterRepository = "https://github.com/txusballesteros/SlidingDeck"
 
     //Libraries Versions
     androidSupportVersion = "23.1.1"
