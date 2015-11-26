@@ -19,8 +19,8 @@ public class SlidingDeck extends ViewGroup {
     private final static float MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR = 0.75f;
     private final static float MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR = 0.4f;
     private final static int MAXIMUM_ITEMS_ON_SCREEN = 5;
-    private final static int MINIMUM_TOP_BOTTOM_OFFSET_DP = 8;
-    private final static int MINIMUM_LEFT_RIGHT_OFFSET_DP = 16;
+    private final static int MINIMUM_TOP_BOTTOM_OFFSET_DP = 4;
+    private final static int MINIMUM_LEFT_RIGHT_OFFSET_DP = 8;
     private View[] viewsBuffer;
     private ListAdapter adapter;
     private SlidingDeckTouchController touchController;
