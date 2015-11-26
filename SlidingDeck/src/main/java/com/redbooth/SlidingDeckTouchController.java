@@ -87,7 +87,8 @@ class SlidingDeckTouchController {
     private boolean checkMinimumMovementTrigger(int currentHorizontalOffset, int currentVerticalOffset) {
         return Math.abs(currentHorizontalOffset) >= MINIMUM_OFFSET_TO_TRIGGER_MOVEMENT_IN_PX ||
                Math.abs(currentVerticalOffset) >= MINIMUM_OFFSET_TO_TRIGGER_MOVEMENT_IN_PX ||
-               Math.abs(accumulatedOffsetX) >= MINIMUM_OFFSET_TO_TRIGGER_MOVEMENT_IN_PX;
+               Math.abs(accumulatedOffsetX) >= MINIMUM_OFFSET_TO_TRIGGER_MOVEMENT_IN_PX ||
+               Math.abs(accumulatedOffsetY) >= MINIMUM_OFFSET_TO_TRIGGER_MOVEMENT_IN_PX;
     }
 
     private void applyHorizontalMotion(int offset) {

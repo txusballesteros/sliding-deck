@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -302,6 +303,7 @@ public class SlidingDeck extends ViewGroup {
 
     void setOffsetTopBottom(int offset) {
         if (offset >= 0) {
+            Log.d("SlidingDeck", String.format("Offset: %d", offset));
             if (offset > maximumOffsetTopBottom) {
                 offsetTopBottom = maximumOffsetTopBottom;
             } else {
