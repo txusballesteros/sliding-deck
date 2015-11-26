@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFF</color>
-    <color name="colorPrimary">#666666</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#21a5b8</color>
+
+    <!-- BRAND -->
+    <color name="brand_red">#d51826</color>
+    <color name="brand_main_50">#7f21a5b8</color>
+    <color name="brand_main">#21a5b8</color>
+    <color name="brand_main_1">#1f8b9b</color>
+    <color name="brand_main_2">#15606c</color>
+    <color name="brand_main_3">#0b363c</color>
+    <color name="brand_main_opacity_30">#3C21a5b8</color>
+    <color name="brand_secondary">#83a1a6</color>
+    <color name="brand_secondary_dark">#7B989C</color>
+
+    <color name="white_opacity_50">#80ffffff</color>
+    <color name="white_opacity_70">#B4ffffff</color>
+    <color name="grey_light">#f6f6f6</color>
+    <color name="grey_light_1">#eeeeee</color>
+    <color name="grey_light_2">#e6e6e6</color>
+    <color name="grey">#cccccc</color>
+    <color name="grey_1">#bbbbbb</color>
+    <color name="grey_2">#999999</color>
+    <color name="grey_dark">#666666</color>
+    <color name="grey_dark_2">#333333</color>
+    <color name="grey_light_2_opacity_70">#B4e6e6e6</color>
+    <color name="grey_dark_2_opacity_25">#40333333</color>
+    <color name="black_opacity_25">#40000000</color>
+    <color name="black_opacity_66">#99000000</color>
+
+    <!-- QUIET -->
+    <color name="quiet_1">#c1e6eb</color>
+
+    <!-- OTHER -->
+    <color name="positive_loud">#7ed321</color>
+    <color name="positive_quiet">#8dce83</color>
+    <color name="important">#e8a95c</color>
+    <color name="loud_light">#e45555</color> <!-- red light -->
+    <color name="neutral">#d4cbaa</color>
+    <color name="chat_away">#e8a95c</color>
+    <color name="orange_connecting">#f5a623</color>
+    <color name="aqua">#21a5b8</color>
 </resources>

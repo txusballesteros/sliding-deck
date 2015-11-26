@@ -33,4 +33,5 @@ dependencies {
     compile mobileDependencies.AppCompat
     compile mobileDependencies.DesignLibrary
     compile mobileDependencies.CardView
+    compile mobileDependencies.Picasso
 }

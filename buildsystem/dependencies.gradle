@@ -23,11 +23,13 @@ ext {
 
     //Libraries Versions
     androidSupportVersion = "23.1.1"
+    piccasoVersion = "2.5.2"
 
     mobileDependencies = [
         AppCompat: "com.android.support:appcompat-v7:${androidSupportVersion}",
         CardView: "com.android.support:cardview-v7:${androidSupportVersion}",
-        DesignLibrary: "com.android.support:design:${androidSupportVersion}"
+        DesignLibrary: "com.android.support:design:${androidSupportVersion}",
+        Picasso: "com.squareup.picasso:picasso:${piccasoVersion}"
     ]
 
     libraryDependencies = [
