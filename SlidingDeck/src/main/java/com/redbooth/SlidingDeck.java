@@ -34,6 +34,7 @@ public class SlidingDeck extends ViewGroup {
     private int maximumOffsetTopBottom;
     private int maximumOffsetLeftRight;
     private boolean performingSwipe = false;
+    private boolean expandedVertically = false;
     private SwipeEventListener swipeEventListener;
 
     private DataSetObserver dataSetObserver = new DataSetObserver() {
@@ -317,6 +318,7 @@ public class SlidingDeck extends ViewGroup {
                 }
             });
             animator.start();
+            expandedVertically = false;
         }
     }
 
@@ -337,7 +339,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void setOffsetLeftRight(int offset) {
-        if (!performingSwipe) {
+        if (!performingSwipe && !expandedVertically) {
             if (offset >= 0) {
                 offsetLeftRight = offset;
                 requestLayout();
@@ -359,7 +361,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void performHorizontalSwipe() {
-        if (!performingSwipe && getChildCount() > 0) {
+        if (!performingSwipe && !expandedVertically && getChildCount() > 0) {
             performingSwipe = true;
             ValueAnimator animator = ValueAnimator.ofInt(offsetLeftRight, getMeasuredWidth());
             animator.setInterpolator(new AccelerateInterpolator());
@@ -385,6 +387,40 @@ public class SlidingDeck extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     offsetLeftRight = (int)animation.getAnimatedValue();
+                    requestLayout();
+                }
+            });
+            animator.start();
+        }
+    }
+
+    public void performVerticalSwipe() {
+        if (!performingSwipe && getChildCount() > 0) {
+            performingSwipe = true;
+            ValueAnimator animator = ValueAnimator.ofInt(offsetTopBottom, maximumOffsetTopBottom);
+            animator.setInterpolator(new DecelerateInterpolator());
+            animator.setDuration(ANIMATION_DURATION_IN_MS);
+            animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) { }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    expandedVertically = true;
+                    offsetTopBottom = maximumOffsetTopBottom;
+                    performingSwipe = false;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) { }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) { }
+            });
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    offsetTopBottom = (int)animation.getAnimatedValue();
                     requestLayout();
                 }
             });
