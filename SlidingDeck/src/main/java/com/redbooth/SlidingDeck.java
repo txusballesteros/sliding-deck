@@ -304,6 +304,12 @@ public class SlidingDeck extends ViewGroup {
 
     private void attachChildViews() {
         removeAllViews();
+        if (adapter.getCount() == 0) {
+            offsetTopBottom = 0;
+            offsetLeftRight = 0;
+            expandedVertically = false;
+            viewsBuffer = new View[MAXIMUM_ITEMS_ON_SCREEN];
+        }
         for (int position = FIRST_VIEW; position < adapter.getCount(); position++) {
             if (position < MAXIMUM_ITEMS_ON_SCREEN) {
                 viewsBuffer[position] = adapter.getView(position, viewsBuffer[position], this);
