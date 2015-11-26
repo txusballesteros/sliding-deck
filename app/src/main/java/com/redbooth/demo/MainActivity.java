@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         slidingAdapter.add(new SlidingDeckModel("Annie Du", "http://lorempixel.com/100/100/transport/", "Investigate whats happening when development crashes", "This is so we have further disucssion around dealing with collisions in the code and how we can test them with spoon or jenkins or something else."));
         slidingDeck = (SlidingDeck)findViewById(R.id.slidingDeck);
         slidingDeck.setAdapter(slidingAdapter);
+        slidingDeck.setEmptyView(findViewById(R.id.emptyView));
         slidingDeck.setSwipeEventListener(new SlidingDeck.SwipeEventListener() {
             @Override
             public void onSwipe(SlidingDeck view) {

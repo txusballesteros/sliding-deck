@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -37,15 +38,36 @@ public class SlidingDeck extends ViewGroup {
     private boolean performingSwipe = false;
     private boolean expandedVertically = false;
     private SwipeEventListener swipeEventListener;
+    private View emptyView;
 
     private DataSetObserver dataSetObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
             attachChildViews();
+            if (emptyView != null) {
+                if (adapter.getCount() == 0) {
+                    SlidingDeck.this.setVisibility(GONE);
+                    emptyView.setVisibility(VISIBLE);
+                } else {
+                    SlidingDeck.this.setVisibility(VISIBLE);
+                    emptyView.setVisibility(GONE);
+                }
+            }
         }
     };
 
-    public void setAdapter(ListAdapter adapter) {
+    public void setEmptyView(@NonNull View emptyView) {
+        if (emptyView == null) {
+            throw new IllegalArgumentException("The empty view cannot be null.");
+        }
+        this.emptyView = emptyView;
+        this.emptyView.setVisibility(GONE);
+    }
+
+    public void setAdapter(@NonNull ListAdapter adapter) {
+        if (adapter == null) {
+            throw new IllegalArgumentException("The adapter cannot be null.");
+        }
         if (this.adapter != null) {
             this.adapter.unregisterDataSetObserver(dataSetObserver);
         }
