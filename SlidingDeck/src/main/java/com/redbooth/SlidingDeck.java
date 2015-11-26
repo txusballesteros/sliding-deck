@@ -7,7 +7,6 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -195,7 +194,7 @@ public class SlidingDeck extends ViewGroup {
             viewTop -= getOffsetTopBottom(zIndex);
         }
         if (offsetLeftRight > 0 && isNotTheFromView(zIndex)) {
-            viewTop += getOffsetLeftRight(MINIMUM_TOP_BOTTOM_OFFSET_DP);
+            viewTop += calculateOffsetLeftRight(MINIMUM_TOP_BOTTOM_OFFSET_DP);
         }
         return viewTop;
     }
@@ -225,7 +224,7 @@ public class SlidingDeck extends ViewGroup {
         return result;
     }
 
-    private int getOffsetLeftRight(int referenceValue) {
+    private int calculateOffsetLeftRight(int referenceValue) {
         float topMinimumOffset = dp2px(referenceValue);
         float offsetFactor = calculateCurrentLeftRightOffsetFactor();
         float result = (topMinimumOffset * offsetFactor);
@@ -255,6 +254,9 @@ public class SlidingDeck extends ViewGroup {
         float widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
               widthMinimumOffset -= widthMinimumOffset * widthMinimumOffsetFactor;
         float viewWidth = (parentWidth - (widthMinimumOffset * (getViewsCount() - zIndex)));
+        if (isNotTheFromView(zIndex)) {
+            viewWidth += calculateOffsetLeftRight(MINIMUM_LEFT_RIGHT_OFFSET_DP);
+        }
         return (int)viewWidth;
     }
 
