@@ -138,7 +138,7 @@ public class SlidingDeck extends ViewGroup {
             viewTop -= getOffsetTopBottom(zIndex);
         }
         if (offsetLeftRight > 0 && isNotTheFromView(zIndex)) {
-            viewTop += getOffsetLeftRight();
+            viewTop += getOffsetLeftRight(MINIMUM_TOP_BOTTOM_OFFSET_DP);
         }
         return viewTop;
     }
@@ -159,8 +159,8 @@ public class SlidingDeck extends ViewGroup {
         return result;
     }
 
-    private int getOffsetLeftRight() {
-        float topMinimumOffset = dp2px(MINIMUM_TOP_BOTTOM_OFFSET_DP);
+    private int getOffsetLeftRight(int referenceValue) {
+        float topMinimumOffset = dp2px(referenceValue);
         float offsetFactor = calculateCurrentLeftRightOffsetFactor();
         float result = (topMinimumOffset * offsetFactor);
         return (int)result;
@@ -210,6 +210,9 @@ public class SlidingDeck extends ViewGroup {
         float widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
               widthMinimumOffset -= widthMinimumOffset * widthMinimumOffsetFactor;
         float viewWidth = (parentWidth - (widthMinimumOffset * ((getChildCount() - 1) - zIndex)));
+        if (isNotTheFromView(zIndex)) {
+            viewWidth += getOffsetLeftRight(MINIMUM_LEFT_RIGHT_OFFSET_DP);
+        }
         return (int)viewWidth;
     }
 
