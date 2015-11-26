@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -32,12 +33,29 @@ public class SlidingDeck extends ViewGroup {
     private int maximumOffsetTopBottom;
     private int maximumOffsetLeftRight;
     private boolean performingSwipe = false;
+    private SwipeEventListener swipeEventListener;
+
+    private DataSetObserver dataSetObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            attachChildViews();
+            requestLayout();
+        }
+    };
 
     public void setAdapter(ListAdapter adapter) {
+        if (this.adapter != null) {
+            this.adapter.unregisterDataSetObserver(dataSetObserver);
+        }
         this.adapter = adapter;
+        this.adapter.registerDataSetObserver(dataSetObserver);
         viewsBuffer = new View[MAXIMUM_ITEMS_ON_SCREEN];
         attachChildViews();
         requestLayout();
+    }
+
+    public void setSwipeEventListener(SwipeEventListener swipeEventListener) {
+        this.swipeEventListener = swipeEventListener;
     }
 
     public SlidingDeck(Context context) {
@@ -252,12 +270,13 @@ public class SlidingDeck extends ViewGroup {
 
     private void measureChildView(View view) {
         view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
     }
 
     private void attachChildViews() {
+        removeAllViews();
         for (int position = FIRST_VIEW; position < adapter.getCount(); position++) {
-            if (getChildCount() < MAXIMUM_ITEMS_ON_SCREEN) {
+            if (position < MAXIMUM_ITEMS_ON_SCREEN) {
                 viewsBuffer[position] = adapter.getView(position, viewsBuffer[position], this);
                 addViewInLayout(viewsBuffer[position], FIRST_VIEW,
                                     viewsBuffer[position].getLayoutParams());
@@ -320,7 +339,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void performHorizontalSwipe() {
-        if (!performingSwipe) {
+        if (!performingSwipe && getViewsCount() > 0) {
             performingSwipe = true;
             ValueAnimator animator = ValueAnimator.ofInt(offsetLeftRight, getMeasuredWidth());
             animator.setInterpolator(new AccelerateInterpolator());
@@ -333,6 +352,7 @@ public class SlidingDeck extends ViewGroup {
                 public void onAnimationEnd(Animator animation) {
                     offsetLeftRight = 0;
                     performingSwipe = false;
+                    removeItemFromAdapter();
                 }
 
                 @Override
@@ -367,8 +387,18 @@ public class SlidingDeck extends ViewGroup {
         }
     }
 
+    private void removeItemFromAdapter() {
+        if (swipeEventListener != null) {
+            swipeEventListener.onSwipe(this);
+        }
+    }
+
     private int dp2px(int value) {
         return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 value, getContext().getResources().getDisplayMetrics());
+    }
+
+    public interface SwipeEventListener {
+        void onSwipe(SlidingDeck view);
     }
 }

@@ -29,5 +29,12 @@ public class MainActivity extends AppCompatActivity {
         }
         slidingDeck = (SlidingDeck)findViewById(R.id.slidingDeck);
         slidingDeck.setAdapter(slidingAdapter);
+        slidingDeck.setSwipeEventListener(new SlidingDeck.SwipeEventListener() {
+            @Override
+            public void onSwipe(SlidingDeck view) {
+                slidingAdapter.remove(slidingAdapter.getItem(0));
+                slidingAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }
