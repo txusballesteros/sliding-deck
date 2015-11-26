@@ -19,7 +19,7 @@ public class SlidingDeck extends ViewGroup {
     private final static int ANIMATION_DURATION_IN_MS = 200;
     private final static int INITIAL_OFFSET_IN_PX = 0;
     private final static int FIRST_VIEW = 0;
-    private final static float INITIAL_ALPHA_FOR_LAST_ITEM = 0.25f;
+    private final static float INITIAL_ALPHA_FOR_LATEST_ITEM = 0.25f;
     private final static float MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR = 0.75f;
     private final static float MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR = 0.4f;
     private final static int MAXIMUM_ITEMS_ON_SCREEN = 5;
@@ -173,14 +173,14 @@ public class SlidingDeck extends ViewGroup {
             }
         }
         if (getChildCount() > 1) {
-            float viewAlpha = INITIAL_ALPHA_FOR_LAST_ITEM;
+            float viewAlpha = INITIAL_ALPHA_FOR_LATEST_ITEM;
             if (offsetLeftRight > 0) {
                 viewAlpha = calculateCurrentLeftRightOffsetFactor();
             } else if (offsetTopBottom > 0) {
                 viewAlpha = calculateCurrentTopBottomOffsetFactor();
             }
-            if (viewAlpha < INITIAL_ALPHA_FOR_LAST_ITEM) {
-                viewAlpha = INITIAL_ALPHA_FOR_LAST_ITEM;
+            if (viewAlpha < INITIAL_ALPHA_FOR_LATEST_ITEM) {
+                viewAlpha = INITIAL_ALPHA_FOR_LATEST_ITEM;
             }
             getChildAt(FIRST_VIEW).setAlpha(viewAlpha);
         }
@@ -259,9 +259,15 @@ public class SlidingDeck extends ViewGroup {
     }
 
     private int calculateViewWidth(float parentWidth, int zIndex) {
-        float widthMinimumOffsetFactor = getVerticalOffsetFactor();
         float widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
-              widthMinimumOffset -= widthMinimumOffset * widthMinimumOffsetFactor;
+        float maximunWidthOffset = (widthMinimumOffset * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
+        float widthMinimumOffsetFactor = getVerticalOffsetFactor();
+        float widthOffset = widthMinimumOffset * widthMinimumOffsetFactor;
+        if (widthOffset < maximunWidthOffset) {
+            widthMinimumOffset -= widthOffset;
+        } else {
+            widthMinimumOffset -= maximunWidthOffset;
+        }
         float viewWidth = (parentWidth - (widthMinimumOffset * (getViewsCount() - zIndex)));
         if (isNotTheFromView(zIndex)) {
             viewWidth += calculateOffsetLeftRight(MINIMUM_LEFT_RIGHT_OFFSET_DP);
