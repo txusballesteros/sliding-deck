@@ -1,7 +1,6 @@
 package com.redbooth.demo;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
                     .inflate(R.layout.sliding_item, parent, false);
         }
         SlidingDeckModel item = getItem(position);
-        Log.d("Adapter", item.getAvatarUri().toString());
         ((TextView)view.findViewById(R.id.elementTitle)).setText(item.getTitle());
         ((TextView)view.findViewById(R.id.description)).setText(item.getDescription());
         ((TextView)view.findViewById(R.id.name)).setText(item.getName());

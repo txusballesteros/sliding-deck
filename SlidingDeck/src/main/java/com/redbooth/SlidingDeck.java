@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -397,30 +398,44 @@ public class SlidingDeck extends ViewGroup {
     public void performVerticalSwipe() {
         if (!performingSwipe && getChildCount() > 0) {
             performingSwipe = true;
-            ValueAnimator animator = ValueAnimator.ofInt(offsetTopBottom, maximumOffsetTopBottom);
+            int initialValue = offsetTopBottom;
+            int endValue = maximumOffsetTopBottom;
+            if (expandedVertically) {
+                initialValue = maximumOffsetTopBottom;
+                endValue = 0;
+            }
+            ValueAnimator animator = ValueAnimator.ofInt(initialValue, endValue);
             animator.setInterpolator(new DecelerateInterpolator());
             animator.setDuration(ANIMATION_DURATION_IN_MS);
             animator.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void onAnimationStart(Animator animation) { }
+                public void onAnimationStart(Animator animation) {
+                }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    expandedVertically = true;
-                    offsetTopBottom = maximumOffsetTopBottom;
+                    if (!expandedVertically) {
+                        offsetTopBottom = maximumOffsetTopBottom;
+                    } else {
+                        offsetTopBottom = 0;
+                    }
+                    expandedVertically = !expandedVertically;
                     performingSwipe = false;
                 }
 
                 @Override
-                public void onAnimationCancel(Animator animation) { }
+                public void onAnimationCancel(Animator animation) {
+                }
 
                 @Override
-                public void onAnimationRepeat(Animator animation) { }
+                public void onAnimationRepeat(Animator animation) {
+                }
             });
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    offsetTopBottom = (int)animation.getAnimatedValue();
+                    offsetTopBottom = (int) animation.getAnimatedValue();
+                    Log.d("Swipe", String.format("%d", offsetTopBottom));
                     requestLayout();
                 }
             });
@@ -429,7 +444,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     void performReleaseTouch() {
-        if (!performingSwipe) {
+        if (!performingSwipe && !expandedVertically) {
             if (offsetLeftRight > 0) {
                 if (offsetLeftRight < maximumOffsetLeftRight) {
                     collapseHorizontalOffset();

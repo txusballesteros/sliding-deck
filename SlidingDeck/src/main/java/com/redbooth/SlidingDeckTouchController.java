@@ -48,9 +48,9 @@ class SlidingDeckTouchController {
                 velocityTracker.computeCurrentVelocity(VELOCITY_UNITS);
                 float xVelocity = velocityTracker.getXVelocity();
                 float yVelocity = velocityTracker.getYVelocity();
-                if (xVelocity >= SNAP_VELOCITY) {
+                if (Math.abs(xVelocity) >= SNAP_VELOCITY) {
                     ownerView.performHorizontalSwipe();
-                } else if (yVelocity >= SNAP_VELOCITY) {
+                } else if (Math.abs(yVelocity) >= SNAP_VELOCITY) {
                     ownerView.performVerticalSwipe();
                 }
                 int currentPositionX = (int)event.getX();
