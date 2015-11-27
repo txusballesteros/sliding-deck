@@ -20,6 +20,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ListAdapter;
 
 public class SlidingDeck extends ViewGroup {
+    private final static boolean ENABLE_OVERDRAW_IMPROVEMENT = false;
     private final static int ANIMATION_DURATION_IN_MS = 200;
     private final static int INITIAL_OFFSET_IN_PX = 0;
     private final static int FIRST_VIEW = 0;
@@ -135,7 +136,7 @@ public class SlidingDeck extends ViewGroup {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result;
         int childIndex = getChildIndex(child);
-        if (!isTheForegroundView(childIndex)) {
+        if (applyOverdrawImprovement(childIndex)) {
             Rect viewClip = calculateClippingViewRect(child, childIndex);
             canvas.save();
             canvas.clipRect(viewClip);
@@ -143,6 +144,18 @@ public class SlidingDeck extends ViewGroup {
             canvas.restore();
         } else {
             result = super.drawChild(canvas, child, drawingTime);
+        }
+        return result;
+    }
+
+    private boolean applyOverdrawImprovement(int viewIndex) {
+        boolean result = false;
+        if (ENABLE_OVERDRAW_IMPROVEMENT) {
+            if (getChildCount() > 2) {
+                if (viewIndex < (getChildCount() - 2)) {
+                    result = true;
+                }
+            }
         }
         return result;
     }
