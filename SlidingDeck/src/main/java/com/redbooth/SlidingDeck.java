@@ -5,6 +5,8 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -130,6 +132,44 @@ public class SlidingDeck extends ViewGroup {
     }
 
     @Override
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean result;
+        int childIndex = getChildIndex(child);
+        if (!isTheForegroundView(childIndex)) {
+            Rect viewClip = calculateClippingViewRect(child, childIndex);
+            canvas.save();
+            canvas.clipRect(viewClip);
+            result = super.drawChild(canvas, child, drawingTime);
+            canvas.restore();
+        } else {
+            result = super.drawChild(canvas, child, drawingTime);
+        }
+        return result;
+    }
+
+    private int getChildIndex(@NonNull View child) {
+        int result = 0;
+        for (int index = 0; index < getChildCount(); index++) {
+            final View item = getChildAt(index);
+            if ((item.getTop() == child.getTop()) && (item.getLeft() == child.getLeft())) {
+                result = index;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private Rect calculateClippingViewRect(View currentView, int viewIndex) {
+        int nextViewIndex = viewIndex + 1;
+        final View nextView = getChildAt(nextViewIndex);
+        int left = currentView.getLeft();
+        int top = currentView.getTop();
+        int right = currentView.getRight();
+        int bottom = top + (nextView.getTop() - top);
+        return new Rect(left, top, right, bottom);
+    }
+
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         int viewHeight = calculateWrapContentHeight();
@@ -225,7 +265,7 @@ public class SlidingDeck extends ViewGroup {
     private int calculateViewLeft(int parentLeft, int parentRight, int childWith, int zIndex) {
         int center = parentLeft + ((parentRight - parentLeft) / 2);
         int result = center - (childWith / 2);
-        if (isTheFromView(zIndex)) {
+        if (isTheForegroundView(zIndex)) {
             result += offsetLeftRight;
         }
         return result;
@@ -238,7 +278,7 @@ public class SlidingDeck extends ViewGroup {
         if (offsetTopBottom > 0) {
             viewTop -= getOffsetTopBottom(zIndex);
         }
-        if (offsetLeftRight > 0 && isNotTheFromView(zIndex)) {
+        if (offsetLeftRight > 0 && isNotTheForegroundView(zIndex)) {
             viewTop += calculateOffsetLeftRight(MINIMUM_TOP_BOTTOM_OFFSET_DP);
         }
         return viewTop;
@@ -253,17 +293,17 @@ public class SlidingDeck extends ViewGroup {
         return view.getAlpha() > 0f && view.getVisibility() != View.GONE;
     }
 
-    private boolean isTheFromView(int zIndex) {
-        return !isNotTheFromView(zIndex);
+    private boolean isTheForegroundView(int zIndex) {
+        return !isNotTheForegroundView(zIndex);
     }
 
-    private boolean isNotTheFromView(int zIndex) {
+    private boolean isNotTheForegroundView(int zIndex) {
         return zIndex < getViewsCount();
     }
 
     private int getOffsetTopBottom(int zIndex) {
         int result = 0;
-        if (isNotTheFromView(zIndex)) {
+        if (isNotTheForegroundView(zIndex)) {
             result = offsetTopBottom * (getChildCount() - (zIndex + 1));
         }
         return result;
@@ -305,7 +345,7 @@ public class SlidingDeck extends ViewGroup {
             widthMinimumOffset -= maximumWidthOffset;
         }
         float viewWidth = (parentWidth - (widthMinimumOffset * (getViewsCount() - zIndex)));
-        if (isNotTheFromView(zIndex)) {
+        if (isNotTheForegroundView(zIndex)) {
             viewWidth += calculateOffsetLeftRight(MINIMUM_LEFT_RIGHT_OFFSET_DP);
         }
         return (int)viewWidth;
