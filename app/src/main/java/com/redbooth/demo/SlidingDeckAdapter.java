@@ -30,7 +30,7 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
         ImageView avatar = (ImageView)view.findViewById(R.id.avatar);
         Picasso.with(parent.getContext())
                 .load(item.getAvatarUri())
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.ic_launcher_48dp)
                 .transform(new RoundedTransform())
                 .into(avatar);
         final View completeView = view.findViewById(R.id.completeCommand);
