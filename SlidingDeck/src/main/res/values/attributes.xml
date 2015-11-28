@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SlidingDeck">
+        <attr name="maxViewsOnScreen" format="integer|reference" />
+        <attr name="enableOverdrawImprovement" format="boolean|reference" />
+        <attr name="itemsMarginTop" format="dimension|reference" />
+        <attr name="itemsMarginLeftRight" format="dimension|reference" />
+        <attr name="animationDuration" format="integer|reference" />
+    </declare-styleable>
+</resources>

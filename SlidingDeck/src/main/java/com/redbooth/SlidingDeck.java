@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 
 public class SlidingDeck extends ViewGroup {
@@ -25,12 +25,17 @@ public class SlidingDeck extends ViewGroup {
     private final static int ANIMATION_DURATION_IN_MS = 200;
     private final static int INITIAL_OFFSET_IN_PX = 0;
     private final static int FIRST_VIEW = 0;
-    private final static float INITIAL_ALPHA_FOR_LATEST_ITEM = 0.25f;
+    private final static float INITIAL_ALPHA_FOR_LATEST_ITEM = 0.20f;
     private final static float MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR = 0.75f;
     private final static float MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR = 0.4f;
     private final static int MAXIMUM_ITEMS_ON_SCREEN = 5;
-    private final static int MINIMUM_TOP_BOTTOM_OFFSET_DP = 8;
-    private final static int MINIMUM_LEFT_RIGHT_OFFSET_DP = 8;
+    private final static int ITEMS_TOP_MARGIN_DP = 8;
+    private final static int ITEMS_LEFT_RIGHT_MARGIN_DP = 8;
+    private int animationDuration = ANIMATION_DURATION_IN_MS;
+    private int itemsMarginTop = dp2px(ITEMS_TOP_MARGIN_DP);
+    private int itemsMarginLeftRight = dp2px(ITEMS_LEFT_RIGHT_MARGIN_DP);
+    private int maximumViewsOnScreen = MAXIMUM_ITEMS_ON_SCREEN;
+    private boolean enableOverdrawImprovement = ENABLE_OVERDRAW_IMPROVEMENT;
     private View[] viewsBuffer;
     private ListAdapter adapter;
     private SlidingDeckTouchController touchController;
@@ -60,6 +65,21 @@ public class SlidingDeck extends ViewGroup {
         }
     };
 
+    public void setMaximumViewsOnScreen(int maxViews) {
+        if (maxViews <= 0) {
+            throw new IllegalArgumentException("The value of maxViews cannot be less than 1.");
+        }
+        maximumViewsOnScreen = maxViews;
+    }
+
+    public void setEnableOverdrawImprovement(boolean enabled) {
+        enableOverdrawImprovement = enabled;
+    }
+
+    public void setAnimationDuration(int duration) {
+        animationDuration = duration;
+    }
+
     public void setEmptyView(@NonNull View emptyView) {
         if (emptyView == null) {
             throw new IllegalArgumentException("The empty view cannot be null.");
@@ -77,7 +97,7 @@ public class SlidingDeck extends ViewGroup {
         }
         this.adapter = adapter;
         this.adapter.registerDataSetObserver(dataSetObserver);
-        viewsBuffer = new View[MAXIMUM_ITEMS_ON_SCREEN];
+        viewsBuffer = new View[maximumViewsOnScreen];
         attachChildViews();
     }
 
@@ -99,31 +119,49 @@ public class SlidingDeck extends ViewGroup {
 
     public SlidingDeck(Context context) {
         super(context);
-        initializeView();
+        initializeView(null);
     }
 
     public SlidingDeck(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initializeView();
+        initializeView(attrs);
     }
 
     public SlidingDeck(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initializeView();
+        initializeView(attrs);
     }
 
     @SuppressWarnings("unused")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public SlidingDeck(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        initializeView();
+        initializeView(attrs);
     }
 
-    private void initializeView() {
-        viewsBuffer = new View[MAXIMUM_ITEMS_ON_SCREEN];
+    private void initializeView(AttributeSet attrs) {
+        readAttributesFromXmlLayout(attrs);
+        viewsBuffer = new View[maximumViewsOnScreen];
         touchController = new SlidingDeckTouchController(this);
     }
 
+    private void readAttributesFromXmlLayout(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray attributes = getContext()
+                    .getTheme().obtainStyledAttributes(attrs, R.styleable.SlidingDeck, 0, 0);
+            maximumViewsOnScreen = attributes
+                    .getInteger(R.styleable.SlidingDeck_maxViewsOnScreen, MAXIMUM_ITEMS_ON_SCREEN);
+            enableOverdrawImprovement = attributes
+                    .getBoolean(R.styleable.SlidingDeck_enableOverdrawImprovement, ENABLE_OVERDRAW_IMPROVEMENT);
+            itemsMarginTop = attributes
+                    .getDimensionPixelSize(R.styleable.SlidingDeck_itemsMarginTop, dp2px(ITEMS_TOP_MARGIN_DP));
+            itemsMarginLeftRight = attributes
+                    .getDimensionPixelSize(R.styleable.SlidingDeck_itemsMarginLeftRight, dp2px(ITEMS_LEFT_RIGHT_MARGIN_DP));
+            animationDuration = attributes
+                    .getInt(R.styleable.SlidingDeck_animationDuration, ANIMATION_DURATION_IN_MS);
+            attributes.recycle();
+        }
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean touchEventCaptured = touchController.onTouchEvent(event);
@@ -151,7 +189,7 @@ public class SlidingDeck extends ViewGroup {
 
     private boolean applyOverdrawImprovement(int viewIndex) {
         boolean result = false;
-        if (ENABLE_OVERDRAW_IMPROVEMENT) {
+        if (enableOverdrawImprovement) {
             if (getChildCount() > 2) {
                 if (viewIndex < (getChildCount() - 2)) {
                     result = true;
@@ -209,7 +247,7 @@ public class SlidingDeck extends ViewGroup {
                 maxChildHeight = Math.max(maxChildHeight, getChildAt(index).getMeasuredHeight());
             }
         }
-        int itemsElevationPadding = dp2px(MINIMUM_TOP_BOTTOM_OFFSET_DP) * getViewsCount();
+        int itemsElevationPadding = itemsMarginTop * getViewsCount();
         int measuredHeight = maxChildHeight + getPaddingTop() + getPaddingBottom() + itemsElevationPadding;
         int measuredOffset = offsetTopBottom * getViewsCount();
         return measuredHeight + measuredOffset;
@@ -286,14 +324,14 @@ public class SlidingDeck extends ViewGroup {
     }
 
     private int calculateViewTop(int parentBottom, int viewHeight, int zIndex) {
-        int topMinimumOffset = dp2px(MINIMUM_TOP_BOTTOM_OFFSET_DP);
+        int topMinimumOffset = itemsMarginTop;
         int viewTop = parentBottom - getPaddingBottom() - viewHeight - (topMinimumOffset
                 * (getViewsCount() - zIndex));
         if (offsetTopBottom > 0) {
             viewTop -= getOffsetTopBottom(zIndex);
         }
         if (offsetLeftRight > 0 && isNotTheForegroundView(zIndex)) {
-            viewTop += calculateOffsetLeftRight(MINIMUM_TOP_BOTTOM_OFFSET_DP);
+            viewTop += calculateOffsetLeftRight(itemsMarginTop);
         }
         return viewTop;
     }
@@ -324,7 +362,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     private int calculateOffsetLeftRight(int referenceValue) {
-        float topMinimumOffset = dp2px(referenceValue);
+        float topMinimumOffset = referenceValue;
         float offsetFactor = calculateCurrentLeftRightOffsetFactor();
         float result = (topMinimumOffset * offsetFactor);
         return (int)result;
@@ -349,7 +387,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     private int calculateViewWidth(float parentWidth, int zIndex) {
-        float widthMinimumOffset = dp2px(MINIMUM_LEFT_RIGHT_OFFSET_DP);
+        float widthMinimumOffset = itemsMarginLeftRight;
         float maximumWidthOffset = (widthMinimumOffset * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
         float widthMinimumOffsetFactor = getVerticalOffsetFactor();
         float widthOffset = widthMinimumOffset * widthMinimumOffsetFactor;
@@ -360,7 +398,7 @@ public class SlidingDeck extends ViewGroup {
         }
         float viewWidth = (parentWidth - (widthMinimumOffset * (getViewsCount() - zIndex)));
         if (isNotTheForegroundView(zIndex)) {
-            viewWidth += calculateOffsetLeftRight(MINIMUM_LEFT_RIGHT_OFFSET_DP);
+            viewWidth += calculateOffsetLeftRight(itemsMarginLeftRight);
         }
         return (int)viewWidth;
     }
@@ -384,10 +422,10 @@ public class SlidingDeck extends ViewGroup {
             offsetTopBottom = 0;
             offsetLeftRight = 0;
             expandedVertically = false;
-            viewsBuffer = new View[MAXIMUM_ITEMS_ON_SCREEN];
+            viewsBuffer = new View[maximumViewsOnScreen];
         }
         for (int position = FIRST_VIEW; position < adapter.getCount(); position++) {
-            if (position < MAXIMUM_ITEMS_ON_SCREEN) {
+            if (position < maximumViewsOnScreen) {
                 viewsBuffer[position] = adapter.getView(position, viewsBuffer[position], this);
                 addViewInLayout(viewsBuffer[position], FIRST_VIEW,
                                     viewsBuffer[position].getLayoutParams());
@@ -400,7 +438,7 @@ public class SlidingDeck extends ViewGroup {
         if (offsetTopBottom > 0) {
             ValueAnimator animator = ValueAnimator.ofInt(offsetTopBottom, INITIAL_OFFSET_IN_PX);
             animator.setInterpolator(new DecelerateInterpolator());
-            animator.setDuration(ANIMATION_DURATION_IN_MS);
+            animator.setDuration(animationDuration);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -417,7 +455,7 @@ public class SlidingDeck extends ViewGroup {
         if (offsetLeftRight > 0) {
             ValueAnimator animator = ValueAnimator.ofInt(offsetLeftRight, INITIAL_OFFSET_IN_PX);
             animator.setInterpolator(new DecelerateInterpolator());
-            animator.setDuration(ANIMATION_DURATION_IN_MS);
+            animator.setDuration(animationDuration);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -460,7 +498,7 @@ public class SlidingDeck extends ViewGroup {
             performingSwipe = true;
             ValueAnimator animator = ValueAnimator.ofInt(offsetLeftRight, getMeasuredWidth());
             animator.setInterpolator(new AccelerateInterpolator());
-            animator.setDuration(ANIMATION_DURATION_IN_MS);
+            animator.setDuration(animationDuration);
             animator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) { }
@@ -502,7 +540,7 @@ public class SlidingDeck extends ViewGroup {
             }
             ValueAnimator animator = ValueAnimator.ofInt(initialValue, endValue);
             animator.setInterpolator(new DecelerateInterpolator());
-            animator.setDuration(ANIMATION_DURATION_IN_MS);
+            animator.setDuration(animationDuration);
             animator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
