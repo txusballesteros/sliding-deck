@@ -48,7 +48,7 @@ class SlidingDeckTouchController {
                 velocityTracker.computeCurrentVelocity(VELOCITY_UNITS);
                 float xVelocity = velocityTracker.getXVelocity();
                 float yVelocity = velocityTracker.getYVelocity();
-                if (Math.abs(xVelocity) >= SNAP_VELOCITY) {
+                if (Math.abs(xVelocity) >= SNAP_VELOCITY && !ownerView.isExpanded()) {
                     ownerView.performHorizontalSwipe();
                 } else if (Math.abs(yVelocity) >= SNAP_VELOCITY) {
                     if ((yVelocity > 0 && !ownerView.isExpanded()) ||
