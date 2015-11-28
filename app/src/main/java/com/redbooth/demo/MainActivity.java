@@ -42,13 +42,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeSlidingDeck() {
         slidingAdapter = new SlidingDeckAdapter(this);
-        slidingAdapter.add(new SlidingDeckModel("Txus Ballesteros", "http://lorempixel.com/100/100/nature/", "Attach and emoji keyboard is over content", "When emoji keyboard or attach panel is visible, it stay over all the content (for example chat messages). This happens in chat, task and conversations."));
-        slidingAdapter.add(new SlidingDeckModel("Fran Sirvent", "http://lorempixel.com/100/100/sports/", "Add Deep Link to Chat Detail", "This task let to the Redbooth Calls application do the integration with the Redbooth App and allow the navigation to chat details."));
-        slidingAdapter.add(new SlidingDeckModel("Joan Fuentes", "http://lorempixel.com/100/100/city/", "Make the release process automated", "Make the release process automated"));
-        slidingAdapter.add(new SlidingDeckModel("Ruben Serrano", "http://lorempixel.com/100/100/food/", "Create a list of potential blog posts", "Let's be evil :smiling_imp: I've created a list. As I've added some proposals, I've changed my :hankey: emoji by the :+1: one, and I've passed the task to the next one. Do the same Joan Fuentes , until everyone has added at least one proposal :smiling_imp:"));
-        slidingAdapter.add(new SlidingDeckModel("Bimal Ghundhu", "http://lorempixel.com/100/100/cats/", "Apply improvements to Notifications list activity", "Apply cache changes for task lists, task details to notifications"));
-        slidingAdapter.add(new SlidingDeckModel("Ben Falk", "http://lorempixel.com/100/100/nightlife/", "Fix FilesDownloader bad naming in local repository", "Some technical debt we created in a PR. This is karma."));
-        slidingAdapter.add(new SlidingDeckModel("Annie Du", "http://lorempixel.com/100/100/transport/", "Investigate whats happening when development crashes", "This is so we have further disucssion around dealing with collisions in the code and how we can test them with spoon or jenkins or something else."));
+        slidingAdapter.add(new SlidingDeckModel("Emilia Clarke",
+                                                "http://www.hollywoodreporter.com/sites/default/files/custom/Kimberly/thr_emilia_clarke.jpg",
+                                                "Emilia Clarke is an English actress. She is best known for her role as Daenerys Targaryen in the HBO series Game of Thrones, for which she received two Emmy Award nominations for Outstanding Supporting Actress in a Drama Series in 2013 and 2015."));
+        slidingAdapter.add(new SlidingDeckModel("Kit Harington",
+                                                "http://www.ew.com/sites/default/files/styles/tout_image_612x380/public/i/2013/09/24/kit-harington-jon-hamm_612x380_0.jpg",
+                                                "Christopher Catesby Harington, better known as Kit Harington, is an English actor. He rose to fame playing the role of Jon Snow in the television series Game of Thrones."));
+        slidingAdapter.add(new SlidingDeckModel("Peter Dinklage",
+                                                "http://media1.popsugar-assets.com/files/2015/01/05/110/n/1922398/2ce86fc8b47262e1_thumb_temp_image881416727523.xxlarge.jpg",
+                                                "Peter Hayden Dinklage is an American actor. Since his breakout role in The Station Agent, he has appeared in numerous films and voiced Ghost in the video game, Destiny."));
+        slidingAdapter.add(new SlidingDeckModel("Lena Headey",
+                                                "http://img15.hostingpics.net/pics/876370lenaheadey.jpg",
+                                                "Lena Headey is an English actress. After being scouted at age 17, Headey worked steadily as an actress in small and supporting roles in films throughout the 1990s, before finding fame for her lead"));
+        slidingAdapter.add(new SlidingDeckModel("Maisie Williams",
+                                                "http://www.ew.com/sites/default/files/styles/tout_image_612x380/public/i/2015/06/16/maisie-williams.jpg?itok=6lBByS7D",
+                                                "Maisie Williams is an English actress. She is known for her role as Arya Stark in the HBO television series Game of Thrones, which earned her the 2012 Portal Awards for Best Supporting Actress "));
+        slidingAdapter.add(new SlidingDeckModel("Sophie Turner",
+                                                "http://static.independent.co.uk/s3fs-public/thumbnails/image/2015/02/15/10/Sophie-Turner-v2.jpg",
+                                                "Sophie Turner is an English actress. Turner is best known for her role as Sansa Stark on the HBO fantasy television series Game of Thrones, which earned her a Young Artist Award nomination for Best Supporting Young Actress in a TV Series. "));
+        slidingAdapter.add(new SlidingDeckModel("Natalie Dormer",
+                                                "http://media1.popsugar-assets.com/files/2014/11/19/077/n/1922398/17fe79cd7add5e92_thumb_temp_image10906271416444282/i/Natalie-Dormer-Interview-Mockingjay-Part-1.jpg",
+                                                "Natalie Dormer is an English actress. She is best known for her roles as Anne Boleyn on the Showtime series The Tudors, as Margaery Tyrell on the HBO series Game of Thrones, Irene Adler and Jamie Moriarty"));
         slidingDeck = (SlidingDeck)findViewById(R.id.slidingDeck);
         slidingDeck.setAdapter(slidingAdapter);
         slidingDeck.setEmptyView(findViewById(R.id.emptyView));

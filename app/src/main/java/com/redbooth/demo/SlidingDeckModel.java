@@ -27,14 +27,9 @@ package com.redbooth.demo;
 import android.net.Uri;
 
 public class SlidingDeckModel {
-    private final String title;
     private final String description;
     private final String userName;
     private final String avatarUrl;
-
-    public String getTitle() {
-        return title;
-    }
 
     public String getDescription() {
         return description;
@@ -48,8 +43,7 @@ public class SlidingDeckModel {
         return Uri.parse(avatarUrl);
     }
 
-    public SlidingDeckModel(String userName, String avatarUrl, String title, String description) {
-        this.title = title;
+    public SlidingDeckModel(String userName, String avatarUrl, String description) {
         this.description = description;
         this.userName = userName;
         this.avatarUrl = avatarUrl;

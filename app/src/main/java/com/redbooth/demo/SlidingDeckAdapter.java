@@ -48,7 +48,6 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
                     .inflate(R.layout.sliding_item, parent, false);
         }
         SlidingDeckModel item = getItem(position);
-        ((TextView)view.findViewById(R.id.elementTitle)).setText(item.getTitle());
         ((TextView)view.findViewById(R.id.description)).setText(item.getDescription());
         ((TextView)view.findViewById(R.id.name)).setText(item.getName());
         ImageView avatar = (ImageView)view.findViewById(R.id.avatar);

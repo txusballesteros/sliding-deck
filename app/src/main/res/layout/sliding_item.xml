@@ -53,42 +53,26 @@
                 android:tint="@color/positive_loud"
                 android:src="@drawable/checkbox_marked_circle_outline_48dp" />
 
-            <TextView
-                android:id="@+id/elementTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/completeCommand"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin_small"
-                android:textColor="@color/grey_dark_2"
-                android:fontFamily="sans-serif-bold"
-                android:singleLine="true"
-                android:textSize="16sp"
-                tools:text="Title"/>
-
-
             <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/elementTitle"/>
+                android:layout_alignParentStart="true"/>
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginTop="@dimen/activity_horizontal_margin_small"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin_small"
                 android:layout_marginStart="@dimen/activity_horizontal_margin_small"
-                android:layout_below="@+id/elementTitle"
                 android:layout_toRightOf="@+id/avatar"
                 android:layout_toLeftOf="@+id/completeCommand"
                 android:textColor="@color/grey_dark_2"
                 android:singleLine="true"
                 android:fontFamily="sans-serif-bold"
-                android:textSize="14sp"
+                android:textSize="20sp"
                 tools:text="Name"/>
 
             <TextView
