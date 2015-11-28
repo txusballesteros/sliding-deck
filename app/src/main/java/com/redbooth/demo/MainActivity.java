@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                                                 "http://media1.popsugar-assets.com/files/2015/01/05/110/n/1922398/2ce86fc8b47262e1_thumb_temp_image881416727523.xxlarge.jpg",
                                                 "Peter Hayden Dinklage is an American actor. Since his breakout role in The Station Agent, he has appeared in numerous films and voiced Ghost in the video game, Destiny."));
         slidingAdapter.add(new SlidingDeckModel("Lena Headey",
-                                                "http://img15.hostingpics.net/pics/876370lenaheadey.jpg",
+                                                "http://img2.wikia.nocookie.net/__cb20150623161517/disney/images/5/5d/Lena_headey_.jpg",
                                                 "Lena Headey is an English actress. After being scouted at age 17, Headey worked steadily as an actress in small and supporting roles in films throughout the 1990s, before finding fame for her lead"));
         slidingAdapter.add(new SlidingDeckModel("Maisie Williams",
                                                 "http://www.ew.com/sites/default/files/styles/tout_image_612x380/public/i/2015/06/16/maisie-williams.jpg?itok=6lBByS7D",
