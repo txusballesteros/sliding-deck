@@ -1,6 +1,5 @@
 package com.redbooth;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
