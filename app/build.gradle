@@ -38,6 +38,19 @@ android {
         versionName globalConfiguration.getAt("androidVersionName")
     }
 
+    productFlavors {
+        dev {
+            minSdkVersion 21
+        }
+        prod {
+            minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
+        }
+    }
+
+    dexOptions {
+        incremental true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
