@@ -137,12 +137,15 @@ public class SlidingDeck extends ViewGroup {
         this.swipeEventListener = swipeEventListener;
     }
 
-    public void swipeForegroundItem() {
-        swipeForegroundItem(swipeEventListener);
+    public void swipeItem(View item) {
+        swipeItem(item, swipeEventListener);
     }
 
-    public void swipeForegroundItem(SwipeEventListener listener) {
-        performHorizontalSwipe(listener);
+    public void swipeItem(View item, SwipeEventListener listener) {
+        viewIndex = findViewIndexByPosition(item.getLeft(), item.getTop());
+        if (viewIndex != NO_VIEW) {
+            performHorizontalSwipe(listener);
+        }
     }
 
     public SlidingDeck(Context context) {
@@ -556,12 +559,13 @@ public class SlidingDeck extends ViewGroup {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
+                    final View item = getChildAt(viewIndex);
+                    if (listener != null) {
+                        listener.onSwipe(SlidingDeck.this, item);
+                    }
                     offsetLeftRight = INITIAL_OFFSET_LEFT;
                     viewIndex = NO_VIEW;
                     performingSwipe = false;
-                    if (listener != null) {
-                        listener.onSwipe(SlidingDeck.this);
-                    }
                 }
 
                 @Override
@@ -674,6 +678,6 @@ public class SlidingDeck extends ViewGroup {
     }
 
     public interface SwipeEventListener {
-        void onSwipe(SlidingDeck view);
+        void onSwipe(SlidingDeck parent, View item);
     }
 }

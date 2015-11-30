@@ -48,6 +48,7 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
                     .inflate(R.layout.sliding_item, parent, false);
         }
         SlidingDeckModel item = getItem(position);
+        view.setTag(item);
         ((TextView)view.findViewById(R.id.description)).setText(item.getDescription());
         ((TextView)view.findViewById(R.id.name)).setText(item.getName());
         ImageView avatar = (ImageView)view.findViewById(R.id.avatar);
@@ -57,24 +58,19 @@ public class SlidingDeckAdapter extends ArrayAdapter<SlidingDeckModel> {
                 .transform(new RoundedTransform())
                 .into(avatar);
         final View completeView = view.findViewById(R.id.completeCommand);
-        completeView.setTag(item);
+        completeView.setTag(view);
         completeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final SlidingDeck slidingDeck = (SlidingDeck) parent;
-                final SlidingDeckModel model = (SlidingDeckModel) view.getTag();
-                if (!slidingDeck.isExpanded()) {
-                    slidingDeck.swipeForegroundItem(new SlidingDeck.SwipeEventListener() {
-                        @Override
-                        public void onSwipe(SlidingDeck view) {
-                            remove(model);
-                            notifyDataSetChanged();
-                        }
-                    });
-                } else {
-                    remove(model);
-                    notifyDataSetChanged();
-                }
+                final SlidingDeck slidingDeck = (SlidingDeck)parent;
+                slidingDeck.swipeItem((View)view.getTag(), new SlidingDeck.SwipeEventListener() {
+                    @Override
+                    public void onSwipe(SlidingDeck parent, View item) {
+                        final SlidingDeckModel slidingDeckModel = (SlidingDeckModel)item.getTag();
+                        remove(slidingDeckModel);
+                        notifyDataSetChanged();
+                    }
+                });
             }
         });
         return view;

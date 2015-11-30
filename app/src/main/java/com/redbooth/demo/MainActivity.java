@@ -26,6 +26,7 @@ package com.redbooth.demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.redbooth.SlidingDeck;
 
@@ -68,9 +69,9 @@ public class MainActivity extends AppCompatActivity {
         slidingDeck.setEmptyView(findViewById(R.id.emptyView));
         slidingDeck.setSwipeEventListener(new SlidingDeck.SwipeEventListener() {
             @Override
-            public void onSwipe(SlidingDeck view) {
-                SlidingDeckModel model = slidingAdapter.getItem(0);
-                slidingAdapter.remove(slidingAdapter.getItem(0));
+            public void onSwipe(SlidingDeck parent, View item) {
+                SlidingDeckModel model = (SlidingDeckModel)item.getTag();
+                slidingAdapter.remove(model);
                 slidingAdapter.insert(model, slidingAdapter.getCount());
                 slidingAdapter.notifyDataSetChanged();
             }
