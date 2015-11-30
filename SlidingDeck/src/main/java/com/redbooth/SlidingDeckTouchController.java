@@ -28,6 +28,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
 class SlidingDeckTouchController {
+    private static final int NO_VIEW = -1;
     private static final int SNAP_VELOCITY = 5000;
     private static final int VELOCITY_UNITS = 1000;
     private static final int INITIAL_POSITION = 0;
@@ -40,6 +41,7 @@ class SlidingDeckTouchController {
     private final SlidingDeck ownerView;
     private MotionType motionType = MotionType.UNKNOWN;
     private VelocityTracker velocityTracker;
+    private int currentItemView = NO_VIEW;
 
     enum MotionType {
         UNKNOWN,
@@ -64,6 +66,8 @@ class SlidingDeckTouchController {
                 velocityTracker.addMovement(event);
                 initialPositionX = (int)event.getX();
                 initialPositionY = (int)event.getY();
+                currentItemView = ownerView
+                                    .findViewIndexByPosition(initialPositionX, initialPositionY);
                 result = true;
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -71,7 +75,7 @@ class SlidingDeckTouchController {
                 velocityTracker.computeCurrentVelocity(VELOCITY_UNITS);
                 float xVelocity = velocityTracker.getXVelocity();
                 float yVelocity = velocityTracker.getYVelocity();
-                if (Math.abs(xVelocity) >= SNAP_VELOCITY && !ownerView.isExpanded()) {
+                if (Math.abs(xVelocity) >= SNAP_VELOCITY) {
                     ownerView.performHorizontalSwipe();
                 } else if (Math.abs(yVelocity) >= SNAP_VELOCITY) {
                     if ((yVelocity > 0 && !ownerView.isExpanded()) ||
@@ -135,7 +139,9 @@ class SlidingDeckTouchController {
     }
 
     private void applyHorizontalMotion(int offset) {
-        ownerView.setOffsetLeftRight(offset);
+        if (currentItemView != NO_VIEW) {
+            ownerView.setOffsetLeftRight(currentItemView, offset);
+        }
     }
 
     private void applyVerticalMotion(int offset) {
