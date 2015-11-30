@@ -405,13 +405,6 @@ public class SlidingDeck extends ViewGroup {
         return zIndex < getViewsCount();
     }
 
-    private int calculateOffsetLeftRight(int referenceValue) {
-        float topMinimumOffset = referenceValue;
-        float offsetFactor = calculateCurrentLeftRightOffsetFactor();
-        float result = (topMinimumOffset * offsetFactor);
-        return (int)result;
-    }
-
     private float calculateCurrentTopBottomOffsetFactor() {
         float offsetLimit = (maximumOffsetTopBottom * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
         float offsetFactor = ((float)offsetTopBottom / offsetLimit);
@@ -482,6 +475,8 @@ public class SlidingDeck extends ViewGroup {
                 viewsBuffer[position] = adapter.getView(position, viewsBuffer[position], this);
                 addViewInLayout(viewsBuffer[position], FIRST_VIEW,
                                     viewsBuffer[position].getLayoutParams());
+            } else {
+                break;
             }
         }
         requestLayout();
