@@ -7,7 +7,7 @@ SlidingDeck View for Android is a complex deck of view, easy to deploy and light
 
 ## Latest Version
 
-![](https://img.shields.io/badge/Version-1.0.0-green.svg) ![](https://img.shields.io/badge/platform-android-green.svg) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg) ![](https://img.shields.io/badge/Licence-Apache%20v2-green.svg)
+[ ![Download](https://api.bintray.com/packages/txusballesteros/maven/SlidingDeck/images/download.svg) ](https://bintray.com/txusballesteros/maven/SlidingDeck/_latestVersion) ![](https://img.shields.io/badge/platform-android-green.svg) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg) ![](https://img.shields.io/badge/Licence-Apache%20v2-green.svg)
 
 ## How to use
 

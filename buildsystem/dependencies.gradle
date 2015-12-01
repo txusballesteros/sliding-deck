@@ -39,7 +39,7 @@ ext {
     androidVersionName = "1.0.0"
 
     //JCenter
-    jcenterUserOrganinzation = "Redbooth"
+    jcenterUserOrganinzation = "txusballesteros"
     jcenterGroupId = "com.redbooth"
     jcenterArtifactId = "SlidingDeck"
     jcenterWebsite = "https://github.com/redbooth/SlidingDeck"
