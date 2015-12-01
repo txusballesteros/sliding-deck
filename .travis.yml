@@ -1,0 +1,16 @@
+sudo: required
+language: android
+env:
+  matrix:
+    - ANDROID_SDKS=android-23 ANDROID_TARGET=android-23  ANDROID_ABI=armeabi-v7a
+
+android:
+  components:
+    - platform-tool
+    - build-tools-23.0.2
+    - android-23
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+script: gradle build
