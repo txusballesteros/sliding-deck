@@ -23,6 +23,13 @@ If you want learn more about the library, you should take a look to the demo App
 
 If you're a hard Android developer and like that your App work fast and fine, you can enable the overdraw improvements proccess into the view. You only need enable the flag **enableOverdrawImprovement** on you xml layout file.
 
+### Customization
+
+If you want to change the default look and feel of the view, you can edit two attributes of the view, see below.
+
+* **itemsMarginLeftRight**, if you want to change the corners padding of the deck elements.
+* **itemsMarginTop**, if you want to change the vertical spacing between the deck elements.
+ 
 ## How to use
 
 ### 1.- Configuring your project dependencies
