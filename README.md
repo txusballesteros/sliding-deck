@@ -1,7 +1,9 @@
 SlidingDeck View
 ================
 
-SlidingDeck View for Android is a complex deck of view, easy to deploy and lightweight. For more info, take a look to the demo App to see all the capabilities and behaviours of the component.  
+Sliding-deck view for Android offer an intuitive and useful user interface widget. If you like to have a deck of views and don't want complicate your code. Here you have the solution. Lightweight and easy to deploy, Sliding-deck brings full feature widget. Your users will can perform swipe, quick review or stick the elements. 
+
+If you want learn more about the library, you should take a look to the demo App to see all the capabilities and behaviours of the component.  
 
 ![](assets/demo.gif)
 
