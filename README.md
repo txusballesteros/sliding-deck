@@ -3,13 +3,25 @@ SlidingDeck View
 
 Sliding-deck view for Android offer an intuitive and useful user interface widget. If you like to have a deck of views and don't want complicate your code. Here you have the solution. Lightweight and easy to deploy, Sliding-deck brings full feature widget. Your users will can perform swipe, quick review or stick the elements. 
 
-If you want learn more about the library, you should take a look to the demo App to see all the capabilities and behaviours of the component.  
+If you want learn more about the library, you should take a look to the demo App and see all the capabilities and behaviours of the component.  
 
 ![](assets/demo.gif)
 
 ## Latest Version
 
 [ ![Download](https://api.bintray.com/packages/txusballesteros/maven/SlidingDeck/images/download.svg) ](https://bintray.com/txusballesteros/maven/SlidingDeck/_latestVersion) ![](https://img.shields.io/badge/platform-android-green.svg) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg) ![](https://img.shields.io/badge/Licence-Apache%20v2-green.svg)
+
+## Features
+
+### Gestures
+
+* **Swipe Left to Right** to move the element horizontally, you can detect this action to create you self logic.
+* **Pull Down** to apply a vertical offset to the element, this action is perfect to allow a Quick Review action to the users.
+* **Swipe Top to Bottom** if you want to show all the visible items and keep theses sticked, and perform a **Swipe Top to Bottom** to pick all the items.
+
+### Overdraw Improvements
+
+If you're a hard Android developer and like that your App work fast and fine, you can enable the overdraw improvements proccess into the view. You only need enable the flag **enableOverdrawImprovement** on you xml layout file.
 
 ## How to use
 
