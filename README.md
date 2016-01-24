@@ -15,8 +15,8 @@ If you want learn more about the library, you should take a look to the demo App
 
 ### Gestures
 
-* **Swipe Left to Right** to move the element horizontally, you can detect this action to create you self logic.
 * **Pull Down** to apply a vertical offset to the element, this action is perfect to allow a Quick Review action to the users.
+* **Swipe Left to Right** to move the element horizontally, you can detect this action to create you self logic.
 * **Swipe Top to Bottom** if you want to show all the visible items and keep theses sticked, and perform a **Swipe Top to Bottom** to pick all the items.
 
 ### Overdraw Improvements
