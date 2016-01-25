@@ -193,6 +193,7 @@ public class SlidingDeck extends ViewGroup {
             attributes.recycle();
         }
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean touchEventCaptured = touchController.onTouchEvent(event);
