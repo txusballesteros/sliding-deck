@@ -65,7 +65,7 @@ Set the data adapter to the view.
 
 ## Motivation of the Project
 
-I created this view as a little piece of the [Redbooth](https://redbooth.com/) App for Android.
+I created this view as a little piece of the [Redbooth](https://redbooth.com/) App for [Android](https://play.google.com/store/apps/details?id=com.redbooth).
 
 ## License
 
