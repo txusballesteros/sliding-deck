@@ -21,7 +21,7 @@ If you want learn more about the library, you should take a look to the demo App
 
 ### Overdraw Improvements
 
-If you're a hard Android developer and like that your App work fast and fine, you can enable the overdraw improvements proccess into the view. You only need enable the flag **enableOverdrawImprovement** on you xml layout file.
+If you're a hard Android developer and like that your App work fast and fine, you can enable the overdraw improvements process into the view. You only need enable the flag **enableOverdrawImprovement** on you xml layout file.
 
 ### Customization
 
