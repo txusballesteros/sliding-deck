@@ -51,7 +51,7 @@ Add the view to your xml layout file.
 <com.redbooth.SlidingDeck
         android:id="@+id/slidingDeck"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content' />
+        android:layout_height="wrap_content" />
 ```
 
 ### 3.- Setting the View Adapter
