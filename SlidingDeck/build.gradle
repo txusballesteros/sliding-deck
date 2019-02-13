@@ -23,8 +23,34 @@
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
  */
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
 
 def globalConfiguration = rootProject.extensions.getByName("ext")
+
+ext {
+    bintrayRepo = "maven"
+    bintrayName = "SlidingDeck"
+
+    publishedGroupId = 'com.redbooth'
+    libraryName = 'SlidingDeck'
+    artifact = 'SlidingDeck'
+
+    libraryDescription = 'SlidingDeck View for Android.'
+
+    siteUrl = 'https://github.com/txusballesteros/sliding-deck'
+    gitUrl = 'https://github.com/txusballesteros/sliding-deck.git'
+
+    libraryVersion = globalConfiguration.getAt("androidVersionName")
+
+    developerId = 'txusballesteros'
+    developerName = 'Txus Ballesteros'
+    developerEmail = 'txus.ballesteros@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 android {
     compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
@@ -54,4 +80,9 @@ dependencies {
     def libraryDependencies = globalConfiguration.libraryDependencies
     implementation libraryDependencies.AndroidAnnotations
     implementation libraryDependencies.AndroidSupportV4
+}
+
+if (project.rootProject.file('local.properties').exists()) {
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 }

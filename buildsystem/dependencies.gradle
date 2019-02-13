@@ -39,14 +39,6 @@ ext {
     androidVersionCode = 2
     androidVersionName = "2.0.0"
 
-    //JCenter
-    jcenterUserOrganinzation = "txusballesteros"
-    jcenterGroupId = "com.redbooth"
-    jcenterArtifactId = "SlidingDeck"
-    jcenterWebsite = "http://redbooth.com"
-    jcenterDescription = "SlidingDeck View for Android"
-    jcenterRepository = "https://github.com/txusballesteros/SlidingDeck"
-
     //Libraries Versions
     androidSupportVersion = "28.0.0"
     piccasoVersion = "2.5.2"
