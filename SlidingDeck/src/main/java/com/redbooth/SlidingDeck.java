@@ -74,6 +74,7 @@ public class SlidingDeck extends ViewGroup {
     private int maximumOffsetLeftRight;
     private boolean performingSwipe = false;
     private boolean expandedVertically = false;
+    private boolean expandable = true;
     private SwipeEventListener swipeEventListener;
     private View emptyView;
 
@@ -92,6 +93,10 @@ public class SlidingDeck extends ViewGroup {
             }
         }
     };
+
+    public boolean isExpandable() {
+        return expandable;
+    }
 
     public void setMaximumViewsOnScreen(int maxViews) {
         if (maxViews <= 0) {
@@ -190,6 +195,8 @@ public class SlidingDeck extends ViewGroup {
                     .getDimensionPixelSize(R.styleable.SlidingDeck_itemsMarginLeftRight, dp2px(ITEMS_LEFT_RIGHT_MARGIN_DP));
             animationDuration = attributes
                     .getInt(R.styleable.SlidingDeck_animationDuration, ANIMATION_DURATION_IN_MS);
+            expandable = attributes
+                    .getBoolean(R.styleable.SlidingDeck_expandable, expandable);
             attributes.recycle();
         }
     }
@@ -312,8 +319,8 @@ public class SlidingDeck extends ViewGroup {
             minimumViewHeight = Math.min(minimumViewHeight, viewHeight);
             maximumViewWidth = Math.max(maximumViewWidth, viewWidth);
         }
-        maximumOffsetTopBottom = (int)(minimumViewHeight * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
-        maximumOffsetLeftRight = (int)(maximumViewWidth * MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR);
+        maximumOffsetTopBottom = (int) (minimumViewHeight * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
+        maximumOffsetLeftRight = (int) (maximumViewWidth * MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR);
     }
 
     @Override
@@ -363,8 +370,8 @@ public class SlidingDeck extends ViewGroup {
             int nextViewIndex = zIndex + 1;
             final View nextView = getChildAt(nextViewIndex);
             int nextViewTop = calculateTheoreticalViewTop(parentBottom,
-                                                          nextView.getMeasuredHeight(),
-                                                          nextViewIndex);
+                    nextView.getMeasuredHeight(),
+                    nextViewIndex);
             float offsetFactor = calculateCurrentLeftRightOffsetFactor();
             viewTop += (nextViewTop - viewTop) * offsetFactor;
         }
@@ -408,7 +415,7 @@ public class SlidingDeck extends ViewGroup {
 
     private float calculateCurrentTopBottomOffsetFactor() {
         float offsetLimit = (maximumOffsetTopBottom * MAXIMUM_OFFSET_TOP_BOTTOM_FACTOR);
-        float offsetFactor = ((float)offsetTopBottom / offsetLimit);
+        float offsetFactor = ((float) offsetTopBottom / offsetLimit);
         if (offsetFactor > 1) {
             offsetFactor = 1f;
         }
@@ -417,7 +424,7 @@ public class SlidingDeck extends ViewGroup {
 
     private float calculateCurrentLeftRightOffsetFactor() {
         float offsetLimit = (maximumOffsetLeftRight * MAXIMUM_OFFSET_LEFT_RIGHT_FACTOR);
-        float offsetFactor = ((float)offsetLeftRight / offsetLimit);
+        float offsetFactor = ((float) offsetLeftRight / offsetLimit);
         if (offsetFactor > 1) {
             offsetFactor = 1f;
         }
@@ -433,7 +440,7 @@ public class SlidingDeck extends ViewGroup {
             viewWidth += (nextViewWidth - viewWidth) * offsetFactor;
 
         }
-        return (int)viewWidth;
+        return (int) viewWidth;
     }
 
     private float calculateTheoreticalViewWidth(float parentWidth, int zIndex) {
@@ -452,7 +459,7 @@ public class SlidingDeck extends ViewGroup {
     private float getVerticalOffsetFactor() {
         float result = 0f;
         if (Math.abs(offsetTopBottom) > INITIAL_OFFSET_TOP) {
-            result = (float)offsetTopBottom / (float)maximumOffsetTopBottom;
+            result = (float) offsetTopBottom / (float) maximumOffsetTopBottom;
         }
         return result;
     }
@@ -475,7 +482,7 @@ public class SlidingDeck extends ViewGroup {
             if (position < maximumViewsOnScreen) {
                 viewsBuffer[position] = adapter.getView(position, viewsBuffer[position], this);
                 addViewInLayout(viewsBuffer[position], FIRST_VIEW,
-                                    viewsBuffer[position].getLayoutParams());
+                        viewsBuffer[position].getLayoutParams());
             } else {
                 break;
             }
@@ -508,7 +515,7 @@ public class SlidingDeck extends ViewGroup {
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    offsetLeftRight = (int)animation.getAnimatedValue();
+                    offsetLeftRight = (int) animation.getAnimatedValue();
                     requestLayout();
                 }
             });
@@ -551,7 +558,8 @@ public class SlidingDeck extends ViewGroup {
             animator.setDuration(animationDuration);
             animator.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void onAnimationStart(Animator animation) { }
+                public void onAnimationStart(Animator animation) {
+                }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -565,15 +573,17 @@ public class SlidingDeck extends ViewGroup {
                 }
 
                 @Override
-                public void onAnimationCancel(Animator animation) { }
+                public void onAnimationCancel(Animator animation) {
+                }
 
                 @Override
-                public void onAnimationRepeat(Animator animation) { }
+                public void onAnimationRepeat(Animator animation) {
+                }
             });
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    offsetLeftRight = (int)animation.getAnimatedValue();
+                    offsetLeftRight = (int) animation.getAnimatedValue();
                     requestLayout();
                 }
             });
@@ -582,7 +592,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     public void performVerticalSwipe() {
-        if (!performingSwipe && getChildCount() > 0) {
+        if (isExpandable() && !performingSwipe && getChildCount() > 0) {
             performingSwipe = true;
             int initialValue = offsetTopBottom;
             int endValue = maximumOffsetTopBottom;
@@ -606,13 +616,16 @@ public class SlidingDeck extends ViewGroup {
                 }
 
                 @Override
-                public void onAnimationStart(Animator animation) { }
+                public void onAnimationStart(Animator animation) {
+                }
 
                 @Override
-                public void onAnimationCancel(Animator animation) { }
+                public void onAnimationCancel(Animator animation) {
+                }
 
                 @Override
-                public void onAnimationRepeat(Animator animation) { }
+                public void onAnimationRepeat(Animator animation) {
+                }
             });
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -669,7 +682,7 @@ public class SlidingDeck extends ViewGroup {
     }
 
     private int dp2px(int value) {
-        return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 value, getContext().getResources().getDisplayMetrics());
     }
 

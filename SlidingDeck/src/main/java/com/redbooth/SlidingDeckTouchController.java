@@ -119,7 +119,9 @@ class SlidingDeckTouchController {
         if (motionType == MotionType.HORIZONTAL) {
             applyHorizontalMotion(horizontalOffset);
         } else if (motionType == MotionType.VERTICAL) {
-            applyVerticalMotion(verticalOffset);
+            if (ownerView.isExpandable()) {
+                applyVerticalMotion(verticalOffset);
+            }
         }
     }
 

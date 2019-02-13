@@ -27,6 +27,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/brand_main_3">
 
@@ -36,7 +37,8 @@
 
         <com.redbooth.SlidingDeck
             style="@style/slideDeck"
-            android:id="@+id/slidingDeck" />
+            android:id="@+id/slidingDeck"
+            app:expandable="false"/>
 
         <LinearLayout
             android:id="@+id/emptyView"
