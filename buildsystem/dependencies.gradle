@@ -36,8 +36,8 @@ ext {
     androidMinSdkVersion = 14
     androidTargetSdkVersion = 28
     androidCompileSdkVersion = 28
-    androidVersionCode = 1
-    androidVersionName = "1.0.0"
+    androidVersionCode = 2
+    androidVersionName = "2.0.0"
 
     //JCenter
     jcenterUserOrganinzation = "txusballesteros"
