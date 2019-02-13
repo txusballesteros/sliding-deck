@@ -31,5 +31,6 @@
         <attr name="itemsMarginLeftRight" format="dimension|reference" />
         <attr name="animationDuration" format="integer|reference" />
         <attr name="expandable" format="boolean|reference" />
+        <attr name="minimumAlpha" format="float|reference" />
     </declare-styleable>
 </resources>

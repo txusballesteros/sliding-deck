@@ -37,8 +37,7 @@
 
         <com.redbooth.SlidingDeck
             style="@style/slideDeck"
-            android:id="@+id/slidingDeck"
-            app:expandable="false"/>
+            android:id="@+id/slidingDeck" />
 
         <LinearLayout
             android:id="@+id/emptyView"

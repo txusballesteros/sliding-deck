@@ -77,6 +77,7 @@ public class SlidingDeck extends ViewGroup {
     private boolean expandable = true;
     private SwipeEventListener swipeEventListener;
     private View emptyView;
+    private float minimumAlpha = INITIAL_ALPHA_FOR_LATEST_ITEM;
 
     private DataSetObserver dataSetObserver = new DataSetObserver() {
         @Override
@@ -197,6 +198,8 @@ public class SlidingDeck extends ViewGroup {
                     .getInt(R.styleable.SlidingDeck_animationDuration, ANIMATION_DURATION_IN_MS);
             expandable = attributes
                     .getBoolean(R.styleable.SlidingDeck_expandable, expandable);
+            minimumAlpha = attributes
+                    .getFloat(R.styleable.SlidingDeck_minimumAlpha, minimumAlpha);
             attributes.recycle();
         }
     }
@@ -340,14 +343,14 @@ public class SlidingDeck extends ViewGroup {
             }
         }
         if (getChildCount() > 1) {
-            float viewAlpha = INITIAL_ALPHA_FOR_LATEST_ITEM;
+            float viewAlpha = minimumAlpha;
             if (offsetLeftRight > INITIAL_OFFSET_LEFT) {
                 viewAlpha = calculateCurrentLeftRightOffsetFactor();
             } else if (offsetTopBottom > INITIAL_OFFSET_TOP) {
                 viewAlpha = calculateCurrentTopBottomOffsetFactor();
             }
-            if (viewAlpha < INITIAL_ALPHA_FOR_LATEST_ITEM) {
-                viewAlpha = INITIAL_ALPHA_FOR_LATEST_ITEM;
+            if (viewAlpha < minimumAlpha) {
+                viewAlpha = minimumAlpha;
             }
             if (!isExpanded()) {
                 getChildAt(FIRST_VIEW).setAlpha(viewAlpha);
