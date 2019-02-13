@@ -24,6 +24,7 @@
  */
 allprojects {
     repositories {
+        google()
         jcenter()
     }
 }
@@ -31,10 +32,10 @@ allprojects {
 ext {
     //Android
     androidApplicationId = "com.redbooth"
-    androidBuildToolsVersion = "23.0.2"
+    androidBuildToolsVersion = "28.0.3"
     androidMinSdkVersion = 14
-    androidTargetSdkVersion = 23
-    androidCompileSdkVersion = 23
+    androidTargetSdkVersion = 28
+    androidCompileSdkVersion = 28
     androidVersionCode = 1
     androidVersionName = "1.0.0"
 
@@ -47,7 +48,7 @@ ext {
     jcenterRepository = "https://github.com/txusballesteros/SlidingDeck"
 
     //Libraries Versions
-    androidSupportVersion = "23.1.1"
+    androidSupportVersion = "28.0.0"
     piccasoVersion = "2.5.2"
 
     mobileDependencies = [

@@ -38,22 +38,9 @@ android {
         versionName globalConfiguration.getAt("androidVersionName")
     }
 
-    productFlavors {
-        dev {
-            minSdkVersion 21
-        }
-        prod {
-            minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
-        }
-    }
-
-    dexOptions {
-        incremental true
-    }
-
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -66,9 +53,9 @@ android {
 
 dependencies {
     def mobileDependencies = globalConfiguration.mobileDependencies
-    compile project(':SlidingDeck')
-    compile mobileDependencies.AppCompat
-    compile mobileDependencies.DesignLibrary
-    compile mobileDependencies.CardView
-    compile mobileDependencies.Picasso
+    implementation project(':SlidingDeck')
+    implementation mobileDependencies.AppCompat
+    implementation mobileDependencies.DesignLibrary
+    implementation mobileDependencies.CardView
+    implementation mobileDependencies.Picasso
 }
